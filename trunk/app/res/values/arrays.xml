@@ -1,0 +1,35 @@
+<resources>
+
+    <string-array name="setting_property_array">
+        <item>Version Infromation</item>
+        <item>Bible Edition</item>
+        <item>Difficulty</item>
+        <item>About App</item>
+        <item>Initialize App</item>
+    </string-array>
+    
+    <string-array name="setting_difficulty">
+        <item>Easy</item>
+        <item>Normal</item>
+        <item>Hard</item>
+    </string-array>
+    
+    <string-array name="project_list_long_click_setting_property_array">
+        <item>Enter Project</item>
+        <item>Rename Project</item>
+        <item>Initialize Project</item>
+        <item>Remove Project</item>
+    </string-array>
+    
+    <string-array name="project_verse_long_click_setting_property_array">
+        <item>Memorize Verse</item>
+        <item>Initialize Verse</item>
+        <item>Remove Verse</item>
+    </string-array>
+    
+    <string-array name="review_manager_long_click_setting_property_array">
+        <item>Memorize Verse</item>
+        <item>Initialize Verse</item>
+    </string-array>
+    
+</resources>

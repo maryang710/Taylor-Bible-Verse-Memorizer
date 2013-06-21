@@ -1,0 +1,59 @@
+<resources>
+
+    <string name="app_name">Bible Mem 002</string>
+    <string name="main_title">Bible Verse Memorizer</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">Verse Mem</string>
+    <string name="pick_verse_label">Pick Verse</string>
+    <string name="memorize_verse_label">Memorize Verses</string>
+    <string name="preferences_label">Preferences</string>
+    <string name="about_label">About</string>
+    <string name="exit_label">Exit</string>
+    <string name="done_label">Done</string>
+    
+    <string name="activity_chooser_title">Choose an Activity</string>
+    <string name="activity_chooser_mfl_button_label">Memorize by First Letters</string>
+    <string name="activity_chooser_lw_button_label">Locate Words</string>
+    
+    <string name="memorize_title">"First Letters" Memorizer</string>
+    <string name="memorize_text">This is where you start memorizing verses.</string>
+    <string name="memorize_no_verses">No verses to display</string>
+    <string name="memorize_help_label">Help</string>
+    <string name="memorize_text_hint">Type first letters of words</string>
+    <string name="memorize_done_label">Done</string>
+    
+    <string name="locate_word_title">Locate Words</string>
+    
+    <string name="prefs_title">Preferences</string>
+    
+    <string name="verse_chooser_title">Select a verse</string>
+    
+	<string name="about_title">About Bible Verse Memorizer</string>
+    <string name="about_text">Bible verse memorization software is a long-term project \
+of the students and faculty in the Taylor University Department of Computer Science \
+and Engineering. The project started in the fall of 2010.</string>
+    
+    <string name="help_popup_title_text">Instructions</string>
+    <string name="memorize_first_letters_instructions_title">Memorize by First Letters: Instructions</string>
+    <string name="memorize_first_letters_instructions_text">Type first letter of missing words in order. If you do not get it in three tries, \
+the word will be filled in for you.</string>
+    <string name="end_instructions_button_label">Continue</string>
+    
+    <string name="show_verse_instructions_text">First, read the verse a number of times.</string>
+    <string name="stop_reading_verse_button_label">Start Memorizing</string>
+    
+    <string name="pref_error_beep_title">Error beep</string>
+    <string name="pref_error_beep_summary">Beep when mistake is made</string>
+    <string name="pref_nack_beep_title">NACK beep</string>
+    <string name="pref_nack_beep_summary">Use NACK beep for errors</string>
+    <string name="Verse_select_string">Book Chapter:Verse</string>
+    <string name="memorizebut">Memorize this Verse</string>
+    <string name="wordSearchbntLabel">Word Search</string>
+    <string name="memproject">My Projects</string>
+    <string name="addVerseBt">Add Verse</string>
+    <string name="addnpt">Add New Project</string>
+    <string name="adpbtn">Add this project</string>
+    <string name="cancelbtn">Cancel</string>
+    <string name="addproject">Add Project</string>
+    <string name="addversestoprojectString">Add Verse to Project</string>
+</resources>

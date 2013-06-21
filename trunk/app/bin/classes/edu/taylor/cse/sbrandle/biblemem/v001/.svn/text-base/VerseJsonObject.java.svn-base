@@ -1,0 +1,44 @@
+package edu.taylor.cse.sbrandle.biblemem.v001;
+
+
+public class VerseJsonObject  {
+	
+	
+	
+	
+	
+	private static String text;;
+	private static int  chapter_id; 
+	private static int verse_id; 
+	private static int book_id;
+
+
+	public  VerseJsonObject(String atext, int achp, int averse, int abook) {  
+		 
+		 text = atext;
+		 chapter_id = achp; 
+		 verse_id = averse; 
+		 book_id = abook;
+	 }
+	
+	
+	
+
+	public String gettext(){
+		return text;
+		
+	}
+	public int getchapter_id(){
+		return chapter_id;
+		
+	}
+	public int getverse_id(){
+		return verse_id;
+		
+	}
+	public int getbook_id(){
+		return book_id;
+		
+	}
+	
+}

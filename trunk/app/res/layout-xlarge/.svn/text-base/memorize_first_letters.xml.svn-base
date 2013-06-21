@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:gravity="top"
+    android:id="@+id/memorize_first_letters_window"
+    android:padding="10dip" >
+
+    <TextView
+	      android:layout_width="wrap_content"
+	      android:layout_height="wrap_content"
+	      android:id="@+id/memorize_verse_ref"
+	      tools:context=".Memorize"
+	      android:gravity="left"
+	      android:padding="10dip"
+	      android:textSize="40sp" />
+    
+    <LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:gravity="top">
+	        
+       <Button
+			android:id="@+id/memorize_help_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/memorize_help_label"
+			android:gravity="center"
+			android:textSize="40sp" />
+       <Button
+			android:id="@+id/memorize_done_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/memorize_done_label"
+			android:gravity="center"
+			android:textSize="40sp" />
+       
+	    </LinearLayout>
+    
+	<TextView
+	    android:id="@+id/memorize_instructions"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:textSize="30sp"
+	    android:padding="10dip" />
+	
+	 <ScrollView 
+	    android:layout_height="wrap_content"   
+      	android:layout_width="fill_parent" >
+		<EditText
+		    android:id="@+id/memorize_verse_text"
+    	    android:editable="false"
+		    android:cursorVisible="false"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:hint="@string/memorize_text_hint"
+		    android:textSize="30sp" />
+	</ScrollView>
+	
+</LinearLayout>

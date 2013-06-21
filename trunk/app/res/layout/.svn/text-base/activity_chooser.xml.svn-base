@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="top"
+    android:orientation="vertical"
+    android:padding="10dip" >
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dip"
+        android:text="@string/activity_chooser_title"
+        android:textSize="24sp"
+        tools:context=".ActivityChooser" />
+
+    <Button
+        android:id="@+id/activity_chooser_mfl_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dip"
+        android:text="@string/activity_chooser_mfl_button_label"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/activity_chooser_lw_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dip"
+        android:text="@string/activity_chooser_lw_button_label"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/wordSearchButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dip"
+        android:text="@string/wordSearchbntLabel"
+        android:textSize="24sp" />
+    
+ 
+
+</LinearLayout>

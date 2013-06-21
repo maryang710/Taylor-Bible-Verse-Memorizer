@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/locate_word_top_view" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:orientation="vertical"
+	android:padding="10dip">
+
+<ScrollView android:layout_height="wrap_content" android:layout_width="fill_parent" >
+    
+	<edu.taylor.cse.sbrandle.biblemem.v001.FlowLayout
+		android:id="@+id/flow_layout" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:gravity="top" />
+	</ScrollView>
+
+	<TextView android:id="@+id/word_to_touch"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:padding="10dip" android:textSize="30sp" />
+
+	<LinearLayout android:layout_height="wrap_content"
+		android:layout_width="fill_parent" android:orientation="horizontal">
+
+		<TextView android:id="@+id/verse_ref"
+		    android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:padding="10dip" android:textSize="24sp" />
+
+		<Button android:id="@+id/done_button"
+		    android:layout_width="wrap_content" android:layout_height="wrap_content"
+		    android:text="@string/done_label"
+		    android:gravity="right"
+			android:textSize="22sp" />
+				
+	</LinearLayout>
+
+
+</LinearLayout>

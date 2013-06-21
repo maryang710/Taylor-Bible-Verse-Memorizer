@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/BibleMemorizer/!svn/ver/31/trunk/app
+END
+.classpath
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/BibleMemorizer/!svn/ver/14/trunk/app/.classpath
+END
+project.properties
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/BibleMemorizer/!svn/ver/30/trunk/app/project.properties
+END
+.project
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/BibleMemorizer/!svn/ver/14/trunk/app/.project
+END
+AndroidManifest.xml
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/BibleMemorizer/!svn/ver/30/trunk/app/AndroidManifest.xml
+END
+ic_launcher-web.png
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/BibleMemorizer/!svn/ver/12/trunk/app/ic_launcher-web.png
+END

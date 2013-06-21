@@ -1,0 +1,83 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="left"
+    android:background="@drawable/layout_bg"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <!--
+         Button
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal"
+		android:layout_marginTop="18dp"
+		android:textSize="18sp"
+		android:text="    Next >   "/
+    -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <edu.taylor.cse.sbrandle.biblemem.v001.SearchGrid
+            android:id="@+id/wordGrid"
+            android:layout_width="fill_parent"
+            android:layout_height="298dp"
+            android:columnWidth="50dp"
+            android:gravity="center"
+            android:numColumns="auto_fit"
+            android:stretchMode="columnWidth" >
+        </edu.taylor.cse.sbrandle.biblemem.v001.SearchGrid>
+
+        <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="match_parent"
+            android:layout_height="89dp"
+            android:layout_weight="0.06" >
+
+            <edu.taylor.cse.sbrandle.biblemem.v001.myCustomTextView
+                android:id="@+id/ctxview"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:text="Large Text"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.33"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center" >
+
+                <TextView
+                    android:id="@+id/addNewprojectText"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left|center_vertical|center|clip_horizontal"
+                    android:layout_marginLeft="0dp"
+                    android:layout_weight="1"
+                    android:gravity="left|center_vertical|center_horizontal"
+                    android:text="0:00"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                <Button
+                    android:id="@+id/addProject"
+                    android:layout_width="85dp"
+                    android:layout_height="44dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:background="@drawable/help"
+                    android:gravity="center" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,234 @@
+package edu.taylor.cse.sbrandle.biblemem.v001;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Locale;
+
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.TextView;
+
+public class LocateWord extends Activity implements OnClickListener {
+
+	private static final String TAG = "LocateWord";
+	public static final String PREFS_NAME = "MyPrefsFile";
+	
+	TextView verseRefView;
+	TextView verseTextView; 
+	TextView wordToTouchView;
+	TextView characterPressedView;
+	View doneButton;
+    String refString = "Ref not set";
+    String textString = "Verse text not set!";
+	//SpannableString verseString;
+    
+    Prefs preferences;
+    boolean beepOnError = false;
+    boolean useNackBeep = true;
+    DatabaseManager  dbHelper = null;
+    //final String[] wordsArray;
+    int wordCount = 1;
+    int currentWordIndex = -1;		// Word currently being processed in wordsArray
+    final int maxErrorCount = 3;	// Maximum number of invalid guesses allowed. 
+    int tryCount = 0;				// Count failed location guesses. Used to show word after maxErrorCount guesses.
+
+    String[] wordsArray;
+    boolean[] hiddenWords  = null;
+    String mixedWords[] = null;
+    ArrayList<TextView> wordViews = new ArrayList<TextView> ();
+    
+    public int Words_in_verse;
+    public float Word_worth;
+    public float potential_points  =100;
+    public float num_of_hidden_words =0;
+    public int project_verse_id;
+	public int project_id;
+    
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+	        super.onCreate(savedInstanceState);
+	        setContentView(R.layout.locate_word);
+	        try {
+    			dbHelper		= new DatabaseManager(this);
+    		} catch (IOException e1) {
+    			// TODO Auto-generated catch block
+    			e1.printStackTrace();
+    		}
+            // Try retrieving the verse to work on
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                refString = extras.getString("VERSE_REF");
+                textString = extras.getString("VERSE_TEXT");
+                project_verse_id = extras.getInt("project_verse_id");
+                project_id = extras.getInt("project_id");
+            } else {
+            	refString = "No reference";
+            	textString = "No verse text sent through!";
+            }
+
+	        verseRefView = (TextView) findViewById(R.id.verse_ref);
+            verseRefView.setText(refString);
+            	    	
+	    	wordToTouchView = (TextView) findViewById(R.id.word_to_touch);
+	    	if(wordToTouchView != null) {
+		    	wordToTouchView.setText("Need word to touch!");
+				wordToTouchView.setBackgroundColor(Color.parseColor("#000000"));
+				wordToTouchView.setTextColor(Color.parseColor("#ffffff"));
+	    	}
+    		    	
+            doneButton = findViewById(R.id.done_button);
+            doneButton.setOnClickListener(this);
+            
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+    		beepOnError = settings.getBoolean("error_beep_pref", false);
+    		useNackBeep = settings.getBoolean("use_nack_beep", false);
+
+	    	
+            wordsArray = textString.split("\\s+");
+        	wordCount = wordsArray.length;
+        	currentWordIndex = 0;
+        	
+            hiddenWords = new boolean[wordCount];
+            
+            for (int i=0; i<wordsArray.length; i++) {
+            	hiddenWords[i] = true;
+            }
+            Word_worth = (100/hiddenWords.length);
+	        int wordCount = wordsArray.length;
+	        mixedWords = new String[wordCount];
+	        
+	        // Make an array of the words as clean strings 
+	        for(int i=0; i<wordCount; i++) {
+	        	mixedWords[i] = normalizeString(wordsArray[i]);
+	        }
+	        
+	        // Now randomize the order
+	        for(int i=0; i<wordCount; i++) {
+	        	String temp = mixedWords[i];
+	        	int swapLocation = (int)(Math.random() * wordCount);
+	        	mixedWords[i] = mixedWords[swapLocation];
+	        	mixedWords[swapLocation] = temp;
+	        }
+
+	        // Set the initial word index and display it 
+	        currentWordIndex = 0;
+	        // Note: the Locale parameter in toUpperCase below needs to be addressed when go multilingual
+	        wordToTouchView.setText(normalizeString(mixedWords[currentWordIndex]).toUpperCase(getResources().getConfiguration().locale));
+	        
+	        
+	        FlowLayout l = null;
+	        l = (FlowLayout) findViewById(R.id.flow_layout);
+	        if( l != null) {
+	        	// Create a TextView per word, set its text, and display it.
+		        for (int i = 0; i < wordsArray.length; i++) {
+		        	TextView t = new TextView(this);
+		        	wordViews.add(t);
+		            t.setText(wordsArray[i]);
+		            t.setBackgroundColor(Color.WHITE);
+		            t.setTextColor(Color.WHITE);
+		            // padding: left, top, right, bottom
+		            t.setPadding(10, 5, 10, 5);
+		            t.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
+		            t.setSingleLine(true);
+		            t.setClickable(true);
+		            final int locInWordsArrayIndex = i;
+    		    	final int wordCountCopy = wordCount; 
+		            t.setOnClickListener(new OnClickListener() {
+		                @Override
+		                public void onClick(View v) {
+		    		    	boolean hidden = hiddenWords[locInWordsArrayIndex];
+		    		    	// Don't process if not hidden
+		    		    	if(hidden) {
+			                    TextView tmp = (TextView) v;
+			    		    	String normalizedWord = normalizeString(wordsArray[locInWordsArrayIndex]);
+			    		    	
+			    		    	// If user clicked on a valid location
+			    		    	if(normalizedWord.equals(normalizeString((String)wordToTouchView.getText())) ){   
+			    		    		resetTryCount();
+			    		    		tmp.setTextColor(Color.BLACK);
+			    		    		hiddenWords[locInWordsArrayIndex] = false;
+					    			currentWordIndex++;
+					    			if(currentWordIndex == wordCountCopy) {
+					    				// Finished last word
+				            			doneButton.setBackgroundColor(Color.parseColor("#00ffef"));
+				            			wordToTouchView.setBackgroundColor(Color.parseColor("#000000"));
+				            			wordToTouchView.setText("");
+					    			}
+					    			else if(currentWordIndex < wordCountCopy) {
+					    				// Else move to next word
+			    		    			wordToTouchView.setText(normalizeString(mixedWords[currentWordIndex]));
+			    		    		}
+			    		    	} else {
+			    		    		// Guessed location incorrectly and clicked on a hidden word. Check whether should show answer.
+			    		    		showIfExceedGuesses();
+			    		    	}
+		    		    	}
+
+		                }
+		            });
+		            l.addView(t, new FlowLayout.LayoutParams(5, 5));
+		        }
+	        }
+	}
+	
+    @Override
+	public void onClick(View v) {
+    	int id = v.getId();
+        if (id ==R.id.done_button) {
+            Log.d(TAG, "clicked on done button");
+            Log.d(TAG, "projectVerseID:  " + project_verse_id + "project_id: "+ String.valueOf(project_id) );
+			dbHelper.UpdateVerseScore(String.valueOf(project_verse_id), (int) potential_points, String.valueOf(project_id));
+
+        	finish();
+        }
+        
+    }
+    
+
+	private String normalizeString(String word) {		
+		return word.toUpperCase().replaceAll("[^A-Z-]", "");
+	}
+	
+	private void resetTryCount() {
+		tryCount = 0;
+	}
+	
+	private void showIfExceedGuesses() {
+		tryCount++;
+		if(tryCount >= maxErrorCount) {
+			// Have exceeded the error count.
+			tryCount = 0;
+			//calculate current potential points
+			potential_points -= Word_worth;
+			String targetWord = normalizeString(mixedWords[currentWordIndex]);
+			for(int i=0; i<wordsArray.length; i++) {
+				if(targetWord.equalsIgnoreCase(wordsArray[i]) && hiddenWords[i]==true) {
+					hiddenWords[i] = false;
+					TextView tv = wordViews.get(i);
+					tv.setTextColor(Color.BLACK);
+	    			currentWordIndex++;
+	    			if(currentWordIndex == wordCount) {
+	    				// Finished last word
+            			doneButton.setBackgroundColor(Color.parseColor("#00ffef"));
+            			wordToTouchView.setBackgroundColor(Color.parseColor("#000000"));
+            			wordToTouchView.setText("");
+	    			}
+	    			else if(currentWordIndex < wordCount) {
+	    				// Else move to next word
+		    			wordToTouchView.setText(normalizeString(mixedWords[currentWordIndex]));
+		    			break;
+		    		}
+				}
+			}
+		}
+	}
+
+}

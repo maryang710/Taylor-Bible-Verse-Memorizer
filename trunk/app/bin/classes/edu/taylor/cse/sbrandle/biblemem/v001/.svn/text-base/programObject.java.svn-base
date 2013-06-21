@@ -1,0 +1,31 @@
+package edu.taylor.cse.sbrandle.biblemem.v001;
+
+
+
+public class programObject {
+	private String name;
+	private String projectDescription;
+	private int projectPercent;
+	private int pid;
+	public programObject(String pname, String pdes, int ppercent, int prid){
+		name =pname;
+		projectDescription = pdes;
+		projectPercent =ppercent;
+		pid = prid;
+	}
+
+	public int getProjectPercent(){
+		return projectPercent;
+	}
+
+	public int getProjectId(){
+		return pid;
+	}
+	public String getProjectName(){
+		return name;
+	}
+
+	public String getProjectDescription(){
+		return projectDescription;
+	}
+}

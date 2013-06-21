@@ -1,0 +1,417 @@
+package edu.taylor.cse.sbrandle.biblemem.v001;
+
+import java.io.IOException;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+
+public class MemorizeFirstLetters extends Activity implements OnClickListener {
+
+	private static final String TAG = "Memorize_First_Letters";
+	public static final String PREFS_NAME = "MyPrefsFile";
+	
+	View window;
+	TextView verseRefView;
+	EditText verseTextView; 
+	TextView characterPressedView;
+    String refString = "Ref not set";
+    String textString = "Verse text not set!";
+    
+    Prefs preferences;
+    boolean beepOnError = false;
+    boolean useNackBeep = true;
+
+    String[] wordsArray = null;
+    int wordsArrayIndex = 0;		// Word currently being worked on in wordsArray
+
+    boolean[] hiddenWords  = null;
+    //int currentWord = 0;
+    int iterationsLeft = 3;
+    final int MAX_ITERATIONS = 3;	// How many times do verse in one exercise
+    int wordTryCount = 0;
+    final int MAX_TRIES = 3;		// How many changes to type first letter correctly
+    public int Words_in_verse;
+    public float Word_worth;
+    public float potential_points  =100;
+    public float num_of_hidden_words =0;
+    
+    View memorizeHelpButton = null;
+    View memorizeDoneButton = null;
+	DatabaseManager  dbHelper = null;
+	public int project_verse_id;
+	public int project_id;
+	
+	@Override
+    protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.memorize_show_verse);
+            
+            try {
+    			dbHelper		= new DatabaseManager(this);
+    		} catch (IOException e1) {
+    			// TODO Auto-generated catch block
+    			e1.printStackTrace();
+    		}
+            
+            // Try retrieving the verse to work on
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                refString = extras.getString("VERSE_REF");
+                textString = extras.getString("VERSE_TEXT");
+                project_verse_id = extras.getInt("project_verse_id");
+                project_id = extras.getInt("project_id");
+            } else {
+            	refString = "No reference";
+            	textString = "No verse text sent through!";
+            }
+           
+            
+            verseRefView = (TextView) findViewById(R.id.memorize_verse_ref);
+            verseRefView.setText(refString);
+            
+            TextView verseTextView = (TextView) findViewById(R.id.memorize_verse_text);
+            if (verseTextView != null) {
+            	verseTextView.setText(textString);
+            } else {
+                Log.d(TAG, "Help! 'verseTextView'=null");
+            }
+            View instructionsButton = findViewById(R.id.stop_reading_verse_button);
+            instructionsButton.setOnClickListener(this);
+            
+    		//SharedPreferences settings = getPreferences(MODE_PRIVATE);
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+            //SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+    		beepOnError = settings.getBoolean("error_beep_pref", false);
+    		useNackBeep = settings.getBoolean("use_nack_beep", false);
+	}
+    
+    @Override
+	public void onClick(View v) {
+    	//Intent i = null;
+        int id = v.getId();
+        if(id == R.id.stop_reading_verse_button){
+        	showInstructionsWindow();
+        } else if(id == R.id.memorize_first_letters_instructions_button){
+        	startMemorizing();
+    } else if(id == R.id.memorize_help_button){
+             Log.d(TAG, "clicked on memorizer help button");
+        	showInstructions();
+    	} else if(id==R.id.memorize_done_button){
+        	
+      
+            Log.d(TAG, "clicked on memorizer done button");
+        	finish();
+    	}	
+        
+    }
+    
+
+	protected void showInstructionsWindow() {
+            setContentView(R.layout.memorize_first_letters_intro);
+            View instructionsButton = findViewById(R.id.memorize_first_letters_instructions_button);
+            instructionsButton.setOnClickListener(this);
+	}
+	
+	protected void startMemorizing() {
+            setContentView(R.layout.memorize_first_letters);
+            //View window = findViewById(R.id.memorize_first_letters_window);
+            memorizeHelpButton = findViewById(R.id.memorize_help_button);
+            memorizeHelpButton.setOnClickListener(this);
+            memorizeDoneButton = findViewById(R.id.memorize_done_button);
+            memorizeDoneButton.setOnClickListener(this);
+                        
+            verseRefView = (TextView) findViewById(R.id.memorize_verse_ref);
+            verseTextView = (EditText) findViewById(R.id.memorize_verse_text);
+            verseTextView.setText("",TextView.BufferType.NORMAL);
+            characterPressedView = (TextView) findViewById(R.id.character_pressed_view);
+            characterPressedView.setTextColor(Color.parseColor("#000000"));
+                                    
+            if(refString == null) {
+            	verseRefView.setText("No verse selected! How did you get here?");
+            }
+            else {
+            	// Then explicitly show keyboard if necessary.
+                showKeyboard();
+            	verseRefView.setText(refString);
+            	wordsArray = textString.split("\\s+");
+                hiddenWords = new boolean[wordsArray.length];
+                num_of_hidden_words = 0;
+            	chooseHiddenWords( hiddenWords, iterationsLeft );
+            	potential_points  =100;
+            	Word_worth = (100/num_of_hidden_words);
+            	
+            	wordsArrayIndex = 0;
+        		verseTextView.setText(generateVerseString(wordsArray, wordsArrayIndex, hiddenWords, verseTextView));
+            	// Look for next hidden word -- skip words that are shown
+        		
+            	while(wordsArrayIndex<wordsArray.length && hiddenWords[wordsArrayIndex]==false) {
+            		++wordsArrayIndex;
+            	}
+            }    
+    }    
+	
+	@Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// Android keyCodeToString function requires API 12+, so plugged in someone's hack.
+		String key = KeyCodeSymbolicNames.keyCodeToString(keyCode);	
+        char newChar = key.charAt(key.length()-1);
+
+		// Another try on the current word.
+    	wordTryCount++;
+    	
+    	// Look for next hidden word -- skip words that are shown
+    	while(wordsArrayIndex<wordsArray.length && hiddenWords[wordsArrayIndex]==false) {
+    		++wordsArrayIndex;
+    	}
+
+    	// If haven't completed all the words yet
+    	if(wordsArrayIndex<wordsArray.length) {
+        	if(Character.toLowerCase(newChar)==Character.toLowerCase(wordsArray[wordsArrayIndex].charAt(0))) {
+        		//verseTextView.setText(verseTextView.getText()+" "+wordsArray[wordsArrayIndex]);
+        		hiddenWords[wordsArrayIndex] = false;
+        		++wordsArrayIndex;
+        		verseTextView.setText(generateVerseString(wordsArray, wordsArrayIndex, hiddenWords, verseTextView));
+        		// Got this word, so no longer hidden
+        		wordTryCount=0;
+        		//++currentWord;
+            	characterPressedView.setBackgroundColor(Color.parseColor("#90EE90"));
+            	characterPressedView.setText(""+Character.toUpperCase(newChar));
+
+        	} else if (wordTryCount==MAX_TRIES) {
+            	//verseTextView.setText(verseTextView.getText()+" "+wordsArray[wordsArrayIndex]);
+        		++wordsArrayIndex;
+        		wordTryCount=0;
+        		verseTextView.setText(generateVerseString(wordsArray, wordsArrayIndex, hiddenWords, verseTextView));
+        		
+        		//calculate points for this verse 
+        		potential_points -= Word_worth;
+        	
+            
+        	} else { // wrong letter and didn't strike out
+            	characterPressedView.setBackgroundColor(Color.parseColor("#FF6EC7"));
+            	characterPressedView.setText(""+Character.toString(newChar));
+            	//if (preferences.getErrorBeep(this.getBaseContext())) {
+            	if(beepOnError) {
+            		final ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
+            	    // Tone options:
+            		// TONE_PROP_NACK (focus group prefers this one), TONE_PROP_BEEP
+            		if(useNackBeep) {
+            			tg.startTone(ToneGenerator.TONE_PROP_NACK);
+            		} else {
+            			tg.startTone(ToneGenerator.TONE_PROP_BEEP);
+            		}
+            	}
+            }
+
+        }
+
+    	// Look for next hidden word -- skip words that are shown
+    	while(wordsArrayIndex<wordsArray.length && hiddenWords[wordsArrayIndex]==false) {
+    		++wordsArrayIndex;
+    	}
+
+    	// Check whether finished and act accordingly.
+    	if(wordsArrayIndex==wordsArray.length) {
+	        --iterationsLeft;
+    		if(iterationsLeft==0) {
+    			memorizeDoneButton.setBackgroundColor(Color.parseColor("#00ffef"));
+    			characterPressedView.setBackgroundColor(Color.parseColor("#000000"));
+    			characterPressedView.setText("");  
+    		} else {
+    			
+    			Log.i(TAG, "points : " +String.valueOf(potential_points));
+    			Log.i(TAG, "project_verse_id : " +String.valueOf(project_verse_id));
+    			Log.i(TAG, "project_id : " +String.valueOf(project_id));
+    			dbHelper.UpdateVerseScore(String.valueOf(project_verse_id), (int) potential_points, String.valueOf(project_id));
+    			//display in short period of time
+    			//Toast.makeText(getApplicationContext(), "Got it!", Toast.LENGTH_SHORT).show();
+    			///*
+    			final ProgressDialog pausingDialog = ProgressDialog.show(MemorizeFirstLetters.this, "", "Got it! ...", true);
+    			new Thread() {
+    				@Override
+					public void run() {
+    					try {
+    			            Thread.sleep(1000);
+    			          } catch (InterruptedException e) {
+    			            e.printStackTrace();
+    			          }
+    					pausingDialog.dismiss();
+    				}
+    			}.start();//*/
+    			num_of_hidden_words = 0;
+    	    	chooseHiddenWords( hiddenWords, iterationsLeft );
+    	    	Word_worth = (100/num_of_hidden_words);
+    	    	potential_points  =100;
+    	    	wordsArrayIndex = 0;        		
+        		verseTextView.setText(generateVerseString(wordsArray, wordsArrayIndex, hiddenWords, verseTextView));
+    			
+    		}
+		}
+    	
+
+        
+        // Could let the default implementation handle the event
+        //return super.onKeyDown(keyCode, event);
+        
+        // Return true to indicate that consumed event.
+        return true;
+    }
+
+	protected String generateVerseString(String[] wordsArray, int wordsArrayIndex, boolean[] hiddenWords, EditText verseTextView) {
+		if (wordsArray.length==0) return "";
+		
+		String showString = "";
+		for (int i=0; i<wordsArray.length; i++) {
+			if (i < wordsArrayIndex) {
+				showString = showString + wordsArray[i];
+			} else if (hiddenWords[i]==true) {
+				//showString = showString + new String(new char[wordsArray[i].length()]).replace("\0", " ");
+				showString = showString + dupString("_", wordsArray[i].length());
+			}
+			else {
+				showString = showString + wordsArray[i];
+			}
+			if (i<wordsArray.length-1) {
+				showString = showString + " ";
+			}
+		}
+		
+		return showString;
+	}
+	
+	protected String dupString(String s, int count) {
+		String result = "";
+		// The +count/3 is to help compensate for proportional spacing
+		for(int i=0; i<=count+count/4; i++) {
+			result = result + s;
+		}
+		return result;		
+	}
+	
+	protected static String concateLines(String[] s, String separator) {  
+		StringBuilder sb = null;
+		if (s.length > 0) {  
+	        sb = new StringBuilder(s[0]);  
+	        for (int i = 1; i < s.length; i++) {  
+	            sb.append(separator);  
+	            sb.append(s[i]);  
+	        }  
+	    }  
+	    return sb.toString();  
+	}
+	
+	protected void chooseHiddenWords( boolean[] hiddenWords, int iterationsLeft ) {
+        int count = hiddenWords.length;
+        int numWordsToHide = (int) (((float)count/(float)MAX_ITERATIONS)*(MAX_ITERATIONS-iterationsLeft+1));
+        for(int i=0; i<count; i++) {
+        	if(i<numWordsToHide) {
+        		hiddenWords[i] = true;
+        		num_of_hidden_words++;
+        	} else {
+        		hiddenWords[i] = false;
+        	}
+        }
+        for(int i=0; i<count; i++) {
+        	boolean temp = hiddenWords[i];
+        	int swapLocation = (int)(Math.random() * count);
+        	hiddenWords[i] = hiddenWords[swapLocation];
+        	hiddenWords[swapLocation] = temp;
+        }
+	}
+	
+    private void showKeyboard() {
+    	//http://stackoverflow.com/questions/7289335/soft-keyboard-shows-up-on-edittext-focus-only-once/7291121#7291121
+        // Force the keyboard to show
+    	verseTextView.requestFocus();
+        verseTextView.postDelayed(new Runnable() {
+           @Override
+           public void run() {
+               InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+               keyboard.showSoftInput(verseTextView, 0);
+           }
+       },200);
+    }
+    
+    private void hideKeyboard() {
+		//http://stackoverflow.com/questions/7289335/soft-keyboard-shows-up-on-edittext-focus-only-once/7291121#7291121
+		verseTextView.requestFocus();
+		verseTextView.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+		        InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		        keyboard.hideSoftInputFromWindow(verseTextView. getWindowToken(), 0);
+	    	}
+		},200);
+	}
+
+    
+	PopupWindow pw;
+	private void showInstructions() {
+	    try {
+	    	hideKeyboard();
+	        //We need to get the instance of the LayoutInflater, use the context of this activity
+	        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	        //Inflate the view from a predefined XML layout
+	        View layout = inflater.inflate(R.layout.popup_layout, (ViewGroup) findViewById(R.id.popup_element));
+	        // create a 300px width and 470px height PopupWindow
+	        pw = new PopupWindow(layout, 400, 400, true);
+	        // display the popup in the center
+	        pw.showAtLocation(layout, Gravity.CENTER, 0, 0);
+	 
+	        //TextView mResultText = (TextView) layout.findViewById(R.id.help_popup_title);
+	        Button doneButton = (Button) layout.findViewById(R.id.end_instructions_button);
+	        doneButton.setOnClickListener(done_button_click_listener);
+	        layout.requestFocus();
+	 
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+	 
+	protected OnClickListener done_button_click_listener = new OnClickListener() {
+	    @Override
+		public void onClick(View v) {
+            Log.d(TAG, "popup dismiss listener fired!");
+	        pw.dismiss();
+		    showKeyboard();
+	    }
+	};
+
+    /*
+	protected void showHelp() {
+		LayoutInflater inflater = getLayoutInflater();
+		View layout = inflater.inflate(R.layout.toast_layout, (ViewGroup) findViewById(R.id.toast_layout_root));
+
+		TextView text = (TextView) layout.findViewById(R.id.help_text);
+		text.setText("Type the first letter of each word, starting with the first word, and continuing " +
+				"with the first letter of each succeeding word. If you do not get it in three tries, " +
+				"the word will be automatically shown and you will move on to the next word.");
+
+		Toast toast = new Toast(getApplicationContext());
+		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+		toast.setDuration(Toast.LENGTH_LONG);
+		toast.setView(layout);
+		toast.show();
+	}
+	*/
+
+}

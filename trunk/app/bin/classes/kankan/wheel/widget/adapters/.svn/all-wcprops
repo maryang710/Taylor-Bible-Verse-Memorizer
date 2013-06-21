@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/BibleMemorizer/!svn/ver/20/trunk/app/src/kankan/wheel/widget/adapters
+END
+WheelViewAdapter.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/BibleMemorizer/!svn/ver/20/trunk/app/src/kankan/wheel/widget/adapters/WheelViewAdapter.java
+END
+ArrayWheelAdapter.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/BibleMemorizer/!svn/ver/20/trunk/app/src/kankan/wheel/widget/adapters/ArrayWheelAdapter.java
+END
+AdapterWheel.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/BibleMemorizer/!svn/ver/20/trunk/app/src/kankan/wheel/widget/adapters/AdapterWheel.java
+END
+NumericWheelAdapter.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/BibleMemorizer/!svn/ver/20/trunk/app/src/kankan/wheel/widget/adapters/NumericWheelAdapter.java
+END
+AbstractWheelAdapter.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/BibleMemorizer/!svn/ver/20/trunk/app/src/kankan/wheel/widget/adapters/AbstractWheelAdapter.java
+END
+AbstractWheelTextAdapter.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/BibleMemorizer/!svn/ver/20/trunk/app/src/kankan/wheel/widget/adapters/AbstractWheelTextAdapter.java
+END

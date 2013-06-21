@@ -1,0 +1,71 @@
+<resources>
+
+    <string name="app_name">성경 구절 외우기</string>
+    <string name="icon_label">구절 외우기</string>
+    
+    <string name="exit_label">나가기</string>
+    <string name="done_label">끝내기</string>
+    <string name="help_label">도움</string>
+    <string name="add_label">추가</string>
+    <string name="rename_label">이름설정</string>
+    <string name="cancel_label">취소</string>
+    <string name="back_label">메뉴로 나가기</string>
+    <string name="add_project_label">프로젝트 추가</string>
+    <string name="add_verse_label">구절 추가</string>
+    <string name="remove_label">없애기</string>
+    <string name="success_label">성공!</string>
+    <string name="fail_label">실패</string>
+    <string name="yes_label">예</string>
+    <string name="no_label">아니요</string>
+    <string name="example_label">예시</string>
+    <string name="init_label">초기화</string>
+    
+    <string name="main_label">메뉴</string>
+    
+    <string name="one_more_dialog_text1"></string>
+    <string name="one_more_dialog_text2">% 이 구절을 외우셨습니다.</string>
+    <string name="one_more_dialog_text3">이 방법으로 다시 한번 도전하시겠습니까?</string>
+
+    <string name="about_title">성경 구절 외우기 앱에 대하여</string>
+    <string name="about_text">성경 구절 외우기 앱은 2010년 가을부터 시작한 테일러 대학 컴퓨터공학부의 장기 프로젝트입니다.</string>
+    
+    <string name="verse_chooser_title">구절 선택하기</string>
+    <string name="verse_chooser_memorize_button">이 구절 외우기</string>
+    <string name="verse_chooser_add_verse_toast_success">이 구절이 프로젝트에 추가되었습니다</string>
+    <string name="verse_chooser_add_verse_toast_fail">이 구절은 이미 프로젝트에 있습니다</string>
+    
+    <string name="activity_chooser_title">방법 정하기</string>
+    <string name="activity_chooser_back_label">다른 구절 외우기</string>
+    
+    <string name="memorize_verse_label">구절 외우기</string>
+    <string name="memorize_project_label">내 프로젝트</string>
+    
+    <string name="review_label">복습 관리</string>
+    
+    <string name="first_letter_help_title">첫 글자 방법</string>
+    <string name="first_letter_help_text">순서대로 빈 구절의 첫 글자가 쓰여진 버튼을 눌러주세요.</string>
+    <string name="first_letter_title">첫 글자</string>
+    
+    <string name="locate_word_help_title">징검다리 방법</string>
+    <string name="locate_word_help_text">모든 단어들을 순서대로 배열해야 합니다. 맞는 자리를 눌러주세요.</string>
+    <string name="locate_word_title">징검다리</string>
+    <string name="locate_word_chance">기회:</string>
+    
+    <string name="word_search_title">Word Search</string>
+    
+    <string name="setting_label">설정</string>
+    <string name="setting_init_title">앱 초기화</string>
+    <string name="setting_init_message">앱에 저장되있는 모든 정보를 초기화 하시겠습니까?</string>
+    
+    <string name="setting_bible_edition_label">번역본 선택</string>
+    <string name="setting_bible_edition_message">앱의 모든 번역본 정보를 바꾸시겠습니까?</string>
+    <string name="setting_bible_edition_current_edtion">현재 번역본:&#160;</string>
+    
+    <string name="project_list_label">프로젝트 목록</string>
+    <string name="project_list_add_dialog_name">프로젝트 이름&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</string>
+    <string name="project_list_remove_dialog_message">없애시겠습니까?</string>
+    <string name="project_list_init_dialog_message">초기화 하시겠습니까?</string>
+    
+    <string name="project_verse_back_button">다른 프로젝트 선택하기</string>
+
+</resources>

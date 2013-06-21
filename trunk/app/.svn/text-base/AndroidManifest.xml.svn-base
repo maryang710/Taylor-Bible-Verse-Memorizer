@@ -1,0 +1,82 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="edu.taylor.cse.sbrandle.biblemem.v001"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <!-- Min version was 8 -->
+    <uses-sdk
+        android:minSdkVersion="9"
+        android:targetSdkVersion="15" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:windowSoftInputMode="adjustResize" >
+        <activity
+            android:name=".WordSearchActivity"
+             >
+          
+        </activity>
+        
+         <activity
+            android:name=".ProjectListActivity"
+              android:label="Project Selector"
+             >
+          
+        </activity>
+           <activity
+            android:name=".ProgramVerses"
+              android:label="Verses in Project"
+             >
+          
+        </activity>
+        
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MemorizeFirstLetters"
+            android:label="@string/memorize_title"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
+        <activity
+            android:name=".LocateWord"
+            android:label="@string/locate_word_title" >
+        </activity>
+        <activity
+            android:name=".VerseChooser"
+            android:label="@string/verse_chooser_title" >
+        </activity>
+        <activity
+            android:name=".ActivityChooser"
+            android:label="@string/activity_chooser_title" >
+        </activity>
+        <activity
+            android:name=".Prefs"
+            android:label="@string/prefs_title" >
+        </activity>
+        <activity
+            android:name=".About"
+            android:label="@string/about_title"
+            android:theme="@android:style/Theme.Dialog" >
+        </activity>
+        <activity
+            android:name=".PickVerse"
+            android:label="@string/verse_chooser_title" >
+        </activity>
+
+        <!--
+         <activity android:name=".Prefs"
+                 android:label="@string/settings_title">
+         </activity>
+        -->
+    </application>
+
+</manifest>

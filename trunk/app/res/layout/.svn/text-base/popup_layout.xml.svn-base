@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:id="@+id/popup_element"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#222222"
+    android:padding="10dp"
+    android:orientation="vertical">
+ 
+    <TextView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:id="@+id/help_popup_title"
+        android:textSize="20sp"
+        android:text="@string/help_popup_title_text">
+        </TextView>
+ 
+     <TextView
+         android:id="@+id/instructions_view"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:textSize="15sp"
+         android:text="@string/memorize_first_letters_instructions_text" >
+         </TextView>
+         
+     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+         android:layout_width="fill_parent"
+         android:layout_height="fill_parent"
+         android:orientation="horizontal"
+         android:gravity="center">
+
+	     <Button
+	         android:id="@+id/end_instructions_button"
+	         android:layout_width="wrap_content"
+			 android:layout_height="wrap_content"
+	         android:gravity="center"
+	         android:text="@string/end_instructions_button_label">
+		   </Button>
+		   
+   </LinearLayout>
+
+</LinearLayout>

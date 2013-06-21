@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="list_title" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textColor">@color/list_title</item>
+    </style>
+     <style name="list_title_grayed_out" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textColor">@color/list_title_grayed_out</item>
+    </style>
+</resources>

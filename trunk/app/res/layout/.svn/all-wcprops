@@ -1,0 +1,113 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/BibleMemorizer/!svn/ver/30/trunk/app/res/layout
+END
+chapter_layout.xml
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/BibleMemorizer/!svn/ver/21/trunk/app/res/layout/chapter_layout.xml
+END
+toast_layout.xml
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/BibleMemorizer/!svn/ver/12/trunk/app/res/layout/toast_layout.xml
+END
+book_layout.xml
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/BibleMemorizer/!svn/ver/21/trunk/app/res/layout/book_layout.xml
+END
+programverses_list.xml
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/BibleMemorizer/!svn/ver/30/trunk/app/res/layout/programverses_list.xml
+END
+memorize_show_verse.xml
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/BibleMemorizer/!svn/ver/30/trunk/app/res/layout/memorize_show_verse.xml
+END
+word_search_layout.xml
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/BibleMemorizer/!svn/ver/27/trunk/app/res/layout/word_search_layout.xml
+END
+program_row.xml
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/BibleMemorizer/!svn/ver/30/trunk/app/res/layout/program_row.xml
+END
+popup_layout.xml
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/BibleMemorizer/!svn/ver/12/trunk/app/res/layout/popup_layout.xml
+END
+memorize_first_letters.xml
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/BibleMemorizer/!svn/ver/12/trunk/app/res/layout/memorize_first_letters.xml
+END
+activity_main.xml
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/BibleMemorizer/!svn/ver/27/trunk/app/res/layout/activity_main.xml
+END
+program_list.xml
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/BibleMemorizer/!svn/ver/30/trunk/app/res/layout/program_list.xml
+END
+locate_word.xml
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/BibleMemorizer/!svn/ver/12/trunk/app/res/layout/locate_word.xml
+END
+verse_chooser.xml
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/BibleMemorizer/!svn/ver/30/trunk/app/res/layout/verse_chooser.xml
+END
+addnewprojectdialog.xml
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/BibleMemorizer/!svn/ver/30/trunk/app/res/layout/addnewprojectdialog.xml
+END
+about.xml
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/BibleMemorizer/!svn/ver/12/trunk/app/res/layout/about.xml
+END
+memorize_first_letters_intro.xml
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/BibleMemorizer/!svn/ver/12/trunk/app/res/layout/memorize_first_letters_intro.xml
+END
+activity_chooser.xml
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/BibleMemorizer/!svn/ver/27/trunk/app/res/layout/activity_chooser.xml
+END
+verse_list.xml
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/BibleMemorizer/!svn/ver/12/trunk/app/res/layout/verse_list.xml
+END

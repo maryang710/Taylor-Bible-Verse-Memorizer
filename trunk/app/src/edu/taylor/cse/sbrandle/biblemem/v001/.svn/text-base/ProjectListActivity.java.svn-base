@@ -1,0 +1,263 @@
+package edu.taylor.cse.sbrandle.biblemem.v001;
+
+
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import edu.taylor.cse.sbrandle.biblemem.v001.ProgramVerses.ProjectVerseAdapterAdapter;
+
+
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+//import android.app.DialogFragment;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+
+
+
+public class ProjectListActivity extends Activity  implements OnClickListener, TextWatcher  {
+	public ListView plist;
+	private static LayoutInflater 	mInflater=null;
+	public ArrayList<programObject> projectList;
+	public DatabaseManager  dbHelper = null;
+	public Context actContext;
+	public boolean validname = false;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		//example of user preferences
+		setContentView(R.layout.program_list);
+		try {
+			dbHelper		= new DatabaseManager(this);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+
+		mInflater = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		projectList = dbHelper.getProjectList();
+		plist = (ListView) findViewById(R.id.plist);
+		plist.setAdapter(new projectAdapter());
+		actContext = this;
+		Button addnpbtn = (Button) findViewById(R.id.addProject);
+		addnpbtn.setOnClickListener(this);
+
+
+
+	}
+
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		
+		projectList = dbHelper.getProjectList();
+		plist.setAdapter(new projectAdapter());
+		plist.invalidate();
+
+	}
+
+	public void onClick(View v) {
+		//int id = v.getId();
+	
+					showAddProjectDialog();
+		
+		
+
+		/*InputMethodManager imm = (InputMethodManager)getSystemService(
+				Context.INPUT_METHOD_SERVICE);
+		(EditText) dialog.findViewById(R.id.pname).requestFocus();
+		imm.showSoftInput(pname,0);
+		 */
+
+	}
+
+	public void showAddProjectDialog(){
+		final Dialog dialog = new Dialog(this);
+		dialog.setTitle("Add New Project");
+		dialog.setContentView(R.layout.addnewprojectdialog);
+		Button save = (Button) dialog.findViewById(R.id.addthisProjectbtn);
+		final  EditText et=  (EditText) dialog.findViewById(R.id.pname);
+		final  EditText des=  (EditText) dialog.findViewById(R.id.pdesctiption);
+		et.addTextChangedListener(this);
+		save.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				if(! (validname)){
+					Toast.makeText(getApplicationContext(), "Make sure project name and description are filled out", Toast.LENGTH_LONG).show();
+
+				}else{
+
+
+					dbHelper.createNewProject(et.getText().toString(), des.getText().toString());
+					projectList = dbHelper.getProjectList();
+					plist.setAdapter(new projectAdapter());
+
+					dialog.dismiss();
+					validname = false;
+
+				}
+
+			}
+		});
+
+		Button cancel = (Button) dialog.findViewById(R.id.canceldialogbtn);
+		// if button is clicked, close the custom dialog
+		cancel.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+		dialog.show();
+		
+	}
+
+	public class projectAdapter extends BaseAdapter {
+
+
+		public projectAdapter() {
+
+
+		}
+
+		public int getCount() {
+			return projectList.size();
+		}
+
+		public Object getItem(int position) {
+			return projectList.get(position);
+		}
+
+		public long getItemId(int position) {
+			return position;
+		}
+
+		// create a new ImageView for each item referenced by the Adapter
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View vi=convertView;
+			if (convertView==null){
+				vi = (View) mInflater.inflate(R.layout.program_row, null);
+			}
+
+			TextView text=(TextView)vi.findViewById(R.id.text);
+			ProgressBar bar=(ProgressBar)vi.findViewById(R.id.projectBar);
+			text.setText(projectList.get(position).getProjectName());
+			TextView des=(TextView)vi.findViewById(R.id.descriptionprogram);
+			des.setText(projectList.get(position).getProjectDescription());
+			dbHelper.UpdateProjectScore ( String.valueOf(projectList.get(position).getProjectId()));
+			bar.setProgress(projectList.get(position).getProjectPercent());
+			vi.setTag(String.valueOf(position));
+
+			vi.setOnLongClickListener(
+
+					new OnLongClickListener() {
+						@Override
+						public boolean onLongClick(View v) {
+							final String index = v.getTag().toString();
+
+							AlertDialog.Builder builder = new AlertDialog.Builder(actContext);
+							builder.setTitle("Remove "+ projectList.get(Integer.valueOf(index)).getProjectName() + " ?");
+							// Add the buttons
+							builder.setPositiveButton("Remove", new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int id) {
+									dbHelper.removeProjectProject(String.valueOf(projectList.get(Integer.valueOf(index)).getProjectId()));
+									projectList = dbHelper.getProjectList();
+									plist.setAdapter(new projectAdapter());
+									plist.invalidate();
+
+								}
+							});
+							builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int id) {
+									Log.i("remove: " , "no");
+								}
+							});
+
+
+							// Create the AlertDialog
+							AlertDialog dialog = builder.create();
+							dialog.show();
+							return true;
+						}
+
+					});
+
+
+			vi.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = null;
+					int index = Integer.valueOf( v.getTag().toString());
+					
+					
+					intent = new Intent(actContext, ProgramVerses.class);
+					intent.putExtra("projectID", projectList.get(index).getProjectId());
+					
+					dbHelper.closeDatabase();
+					startActivity(intent);
+				}
+			});
+					
+				
+
+			return vi;
+		}
+
+
+
+
+	}
+
+
+
+
+	@Override
+	public void afterTextChanged(Editable arg0) {
+		if(arg0.length() > 0){
+			validname = true;
+		}
+
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+			int arg3) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before, int count) {
+		// TODO Auto-generated method stub
+
+	}
+
+
+
+}

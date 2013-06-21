@@ -1,0 +1,239 @@
+package edu.taylor.cse.sbrandle.biblemem.v001;
+
+
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import edu.taylor.cse.sbrandle.biblemem.v001.ProjectListActivity.projectAdapter;
+
+
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+//import android.app.DialogFragment;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+
+
+
+public class ProgramVerses extends Activity  implements OnClickListener, TextWatcher  {
+	public ListView pvlist;
+	private static LayoutInflater 	mInflater=null;
+	public ArrayList<Verse> verseList;
+	public DatabaseManager  dbHelper = null;
+	public Context actContext;
+	public boolean validname = false;
+	public int  project_id =0;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		//example of user preferences
+		setContentView(R.layout.programverses_list);
+		try {
+			dbHelper		= new DatabaseManager(this);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+
+		 Bundle extras = getIntent().getExtras();
+         if (extras != null) {
+        	 project_id = extras.getInt("projectID");
+           
+         }else{
+        	 finish();
+         }
+		mInflater = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		verseList = dbHelper.getVersesInProgramt(String.valueOf(project_id));
+		pvlist = (ListView) findViewById(R.id.pvlist);
+		pvlist.setAdapter(new ProjectVerseAdapterAdapter());
+		actContext = this;
+		Button addvbtn = (Button) findViewById(R.id.addVersetoProject);
+		addvbtn.setOnClickListener(this);
+
+	    
+
+
+	}
+
+
+
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		//dbHelper.removeProjectProject(String.valueOf(projectList.get(Integer.valueOf(index)).getProjectId()));
+		verseList = dbHelper.getVersesInProgramt(String.valueOf(project_id));
+		pvlist.setAdapter(new ProjectVerseAdapterAdapter());
+		pvlist.invalidate();
+
+	}
+
+
+
+
+	public void onClick(View v) {
+		
+
+		Intent intent = null;
+		//int index = Integer.valueOf( v.getTag().toString());
+		
+		
+		intent = new Intent(actContext, VerseChooser.class);
+		intent.putExtra("addtoproject", true);
+		intent.putExtra("projectID", project_id);
+		
+	
+		startActivity(intent);
+
+	}
+
+
+	public class ProjectVerseAdapterAdapter extends BaseAdapter {
+
+
+		public ProjectVerseAdapterAdapter() {
+
+
+		}
+
+		public int getCount() {
+			return verseList.size();
+		}
+
+		public Object getItem(int position) {
+			return verseList.get(position);
+		}
+
+		public long getItemId(int position) {
+			return position;
+		}
+
+		// create a new ImageView for each item referenced by the Adapter
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View vi=convertView;
+			if (convertView==null){
+				vi = (View) mInflater.inflate(R.layout.program_row, null);
+			}
+
+			TextView text=(TextView)vi.findViewById(R.id.text);
+			ProgressBar bar=(ProgressBar)vi.findViewById(R.id.projectBar);
+			text.setText(verseList.get(position).getReference());
+			TextView des=(TextView)vi.findViewById(R.id.descriptionprogram);
+			des.setText(verseList.get(position).gettext());
+
+			bar.setProgress(verseList.get(position).getPercent());
+			vi.setTag(String.valueOf(position));
+
+			vi.setOnLongClickListener(
+
+					new OnLongClickListener() {
+						@Override
+						public boolean onLongClick(View v) {
+							final String index = v.getTag().toString();
+
+							AlertDialog.Builder builder = new AlertDialog.Builder(actContext);
+							builder.setTitle("Remove "+ verseList.get(Integer.valueOf(index)).getReference() + " ?");
+							// Add the buttons
+							builder.setPositiveButton("Remove", new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int id) {
+									dbHelper.removeVerseFromProject((String.valueOf(verseList.get(Integer.valueOf(index)).getproject_verse_id())));
+									verseList = dbHelper.getVersesInProgramt(String.valueOf(project_id));
+									pvlist.setAdapter(new ProjectVerseAdapterAdapter());
+									pvlist.invalidate();
+
+								}
+							});
+							builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int id) {
+									Log.i("remove: " , "no");
+								}
+							});
+
+
+							// Create the AlertDialog
+							AlertDialog dialog = builder.create();
+							dialog.show();
+							return true;
+						}
+
+					});
+
+			vi.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					final String index = v.getTag().toString();
+					Intent intent = null;
+					String refString = verseList.get(Integer.valueOf(index)).getReference();
+					String textString = verseList.get(Integer.valueOf(index)).gettext();
+					int project_verse_id = verseList.get(Integer.valueOf(index)).getproject_verse_id();
+					intent = new Intent(actContext, ActivityChooser.class);
+					intent.putExtra("VERSE_REF", refString);
+					intent.putExtra("VERSE_TEXT", textString);
+					intent.putExtra("projectID", project_id);
+					intent.putExtra("project_verse_id", project_verse_id);
+					dbHelper.closeDatabase();
+					startActivity(intent);
+				}
+			});
+					
+
+
+			return vi;
+		}
+
+
+
+
+	}
+
+
+
+
+	@Override
+	public void afterTextChanged(Editable arg0) {
+		if(arg0.length() > 0){
+			validname = true;
+		}
+
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+			int arg3) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before, int count) {
+		// TODO Auto-generated method stub
+
+	}
+
+
+
+}

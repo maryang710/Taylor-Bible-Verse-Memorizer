@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="top"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="460dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/show_verse_instructions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="left"
+            android:minWidth="200dp"
+            android:padding="10dip"
+            android:text="@string/show_verse_instructions_text"
+            android:textSize="24sp"
+            tools:context=".Memorize" />
+
+        <TextView
+            android:id="@+id/memorize_verse_ref"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:minWidth="200dp"
+            android:padding="10dip"
+            android:textSize="24sp"
+            tools:context=".Memorize" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="241dp"
+            android:orientation="vertical" >
+
+            <ScrollView
+                android:id="@+id/memorize_verse_text_scroller"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+
+                <TextView
+                    android:id="@+id/memorize_verse_text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:background="#ffffff"
+                    android:gravity="left"
+                    android:padding="10dip"
+                    android:text="The verse goes here."
+                    android:textColor="#ff000000"
+                    android:textSize="24sp"
+                    tools:context=".Memorize" />
+            </ScrollView>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dip"
+            tools:context=".Memorize" />
+
+        <Button
+            android:id="@+id/stop_reading_verse_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="20dip"
+            android:text="@string/stop_reading_verse_button_label"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

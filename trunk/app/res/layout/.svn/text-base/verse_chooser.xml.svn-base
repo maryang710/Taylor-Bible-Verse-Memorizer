@@ -1,0 +1,89 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/layout_bg"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        android:layout_weight="0.11"
+        android:text="@string/Verse_select_string"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.88"
+        android:orientation="horizontal" >
+
+        <kankan.wheel.widget.WheelView
+            android:id="@+id/bookwheel"
+            android:layout_width="40dp"
+            android:layout_height="151dp"
+            android:layout_weight="0.25" />
+
+        <kankan.wheel.widget.WheelView
+            android:id="@+id/chapter"
+            android:layout_width="67dp"
+            android:layout_height="151dp"
+            android:layout_weight="0.00" />
+
+        <kankan.wheel.widget.WheelView
+            android:id="@+id/verse"
+            android:layout_width="52dp"
+            android:layout_height="151dp" />
+    </LinearLayout>
+
+    <!--
+         Button
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal"
+		android:layout_marginTop="18dp"
+		android:textSize="18sp"
+		android:text="    Next >   "/
+    -->
+
+    <LinearLayout
+        android:id="@+id/memorizebtnlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/memorizar_button_chooser"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/memorizebut"
+           />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/addVersetoProjectbtnlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <Button
+            android:id="@+id/doneAddingVersesToProjectBtn"
+            android:layout_width="143dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.21"
+            android:text="@string/done_label" />
+
+        <Button
+            android:id="@+id/addVerseToProjectButton"
+            android:layout_width="201dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.21"
+            android:text="@string/addversestoprojectString" />
+
+    </LinearLayout>
+
+</LinearLayout>

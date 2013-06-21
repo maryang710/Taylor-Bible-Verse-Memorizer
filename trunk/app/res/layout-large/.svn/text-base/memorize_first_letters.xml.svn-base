@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/memorize_first_letters_window"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="top"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/memorize_verse_ref"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:padding="10dip"
+        android:textSize="24sp"
+        tools:context=".Memorize" />
+
+    <LinearLayout
+        android:id="@+id/horizontal_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/memorize_help_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/memorize_help_label"
+            android:textSize="22sp" />
+
+        <Button
+            android:id="@+id/memorize_done_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/memorize_done_label"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/character_pressed_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="22sp" />
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/textview_scroller"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <EditText
+            android:id="@+id/memorize_verse_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/back"
+            android:cursorVisible="false"
+            android:editable="false"
+            android:hint="@string/memorize_text_hint"
+            android:padding="10dip"
+            android:textColor="#ffffffff"
+            android:textSize="22sp" />
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,393 @@
+package edu.taylor.cse.sbrandle.biblemem.v001;
+
+import edu.taylor.cse.sbrandle.biblemem.v001.R;
+import java.io.IOException;
+import java.util.ArrayList;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+import kankan.wheel.widget.OnWheelChangedListener;
+import kankan.wheel.widget.OnWheelScrollListener;
+import kankan.wheel.widget.WheelView;
+import kankan.wheel.widget.adapters.AbstractWheelTextAdapter;
+import kankan.wheel.widget.adapters.ArrayWheelAdapter;
+import android.app.Activity;
+
+
+
+
+
+public class VerseChooser extends Activity {
+	// Scrolling flag
+	private boolean scrolling = false;
+	private ArrayList<String> totalchp;
+	public  Context appCtx;
+	WheelView verse; 
+	WheelView chapters;
+	WheelView booksWheel; 
+	DatabaseManager  dbHelper = null;
+	ArrayList<String> bookNames;
+	public boolean addVerseToProject = false;
+	public boolean practiceVese = false;
+	public int project_id;
+
+	
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		 
+		super.onCreate(savedInstanceState);
+		
+		setContentView(R.layout.verse_chooser);
+
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			addVerseToProject = extras.getBoolean("addtoproject");
+			practiceVese = extras.getBoolean("practice");
+		}
+
+		if(addVerseToProject){
+
+			LinearLayout memorizebtnlayout = (LinearLayout) findViewById(R.id.memorizebtnlayout);
+			memorizebtnlayout.setVisibility(View.GONE);
+			project_id =  extras.getInt("projectID");
+
+			
+			memorizebtnlayout.invalidate();
+		}else{
+			LinearLayout practicelayout = (LinearLayout) findViewById(R.id.addVersetoProjectbtnlayout);
+
+			practicelayout.setVisibility(View.GONE);
+			
+			practicelayout.invalidate();
+		}
+
+		//intent.putExtra("addtoproject", true);
+		//intent.putExtra("ProjectId", project_id);
+
+
+		verse = (WheelView) findViewById(R.id.verse);
+		chapters = (WheelView) findViewById(R.id.chapter);
+		booksWheel = (WheelView) findViewById(R.id.bookwheel);
+		appCtx = this.getApplicationContext();
+		bookNames =  new ArrayList<String>();
+		try {
+			dbHelper		= new DatabaseManager(appCtx);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+
+
+		verse.setVisibleItems(5);
+		verse.setViewAdapter(new VerseAdapter(this,31));
+		verse.setCurrentItem(0);
+
+
+
+		chapters.setVisibleItems(3);
+		chapters.setViewAdapter(new ChapterAdapter(this,50));
+
+
+
+
+		chapters.addChangingListener(new OnWheelChangedListener() {
+			public void onChanged(WheelView wheel, int oldValue, int newValue) {
+				if (!scrolling) {
+					//update verses
+					updateVerseWheel(verse, appCtx , Integer.valueOf(booksWheel.getCurrentItem()),Integer.valueOf(chapters.getCurrentItem()));
+				}
+			}
+		});
+
+		chapters.addScrollingListener( new OnWheelScrollListener() {
+			public void onScrollingStarted(WheelView wheel) {
+				scrolling = true;
+			}
+			public void onScrollingFinished(WheelView wheel) {
+				scrolling = false;
+
+				//update verses
+				updateVerseWheel(verse,appCtx, Integer.valueOf(booksWheel.getCurrentItem()),Integer.valueOf(chapters.getCurrentItem()));
+
+			}
+		});
+
+		chapters.setCurrentItem(0);
+
+		BookAdapter bookadp;
+		try {
+			bookadp = new BookAdapter(this);
+			totalchp = bookadp.gettotalchp();
+			booksWheel.setViewAdapter(bookadp);
+			booksWheel.setVisibleItems(3);
+			booksWheel.addChangingListener(new OnWheelChangedListener() {
+				public void onChanged(WheelView wheel, int oldValue, int newValue) {
+					if (!scrolling) {
+						//update chapters
+						updateChapterWheel(chapters, Integer.valueOf( totalchp.get(newValue)));
+					}
+				}
+			});
+
+			booksWheel.addScrollingListener( new OnWheelScrollListener() {
+				public void onScrollingStarted(WheelView wheel) {
+					scrolling = true;
+				}
+				public void onScrollingFinished(WheelView wheel) {
+					scrolling = false;
+					//update chapters
+					int newBookID = wheel.getCurrentItem();
+					updateChapterWheel(chapters, Integer.valueOf( totalchp.get(newBookID)));
+				}
+			});
+
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+		Button memorizeButton = (Button) findViewById(R.id.memorizar_button_chooser);
+		memorizeButton.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				startActivityChooser();
+			}
+		});
+
+		Button addVerseToProjectBtn = (Button) findViewById(R.id.addVerseToProjectButton);
+		addVerseToProjectBtn.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				addVerseThisVerse();
+			}
+		});
+
+		Button doneBtn = (Button) findViewById(R.id.doneAddingVersesToProjectBtn);
+		doneBtn.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				finish();
+			}
+		});
+
+
+
+
+	}
+
+	public void addVerseThisVerse(){
+		int b = booksWheel.getCurrentItem()+1;
+		int c = chapters.getCurrentItem()+1;
+		int v = verse.getCurrentItem()+1; 
+		
+
+		Verse memVerse = dbHelper.getVerseWithReference(b, c, v);
+		String refString = memVerse.getReference();
+		String textString = memVerse.getText();
+
+		if(dbHelper.AddVerseToProject(String.valueOf(project_id), textString, refString, "0")){
+			Toast.makeText(getApplicationContext(), "Verse added", Toast.LENGTH_LONG).show();
+
+
+		}else{
+			Toast.makeText(getApplicationContext(), "Verse was already in Project", Toast.LENGTH_LONG).show();
+
+		}
+
+	}
+
+	private void startActivityChooser() {
+		int b = booksWheel.getCurrentItem()+1;
+		int c = chapters.getCurrentItem()+1;
+		int v = verse.getCurrentItem()+1; 
+
+
+
+		Verse memVerse = dbHelper.getVerseWithReference(b, c, v);
+
+		Intent intent = null;
+		String refString = memVerse.getReference();
+		String textString = memVerse.getText();
+		intent = new Intent(this, ActivityChooser.class);
+		intent.putExtra("VERSE_REF", refString);
+		intent.putExtra("VERSE_TEXT", textString);
+		dbHelper.closeDatabase();
+		startActivity(intent);
+
+	}
+
+
+	private void updateChapterWheel(WheelView wheel,int total) {
+		String[] totalItems = new String[total];
+		for ( int i =0; i < total; i++){
+			totalItems[i] = (String.valueOf(i+1));
+
+		}
+		ArrayWheelAdapter<String> adapter =
+				new ArrayWheelAdapter<String>(this, totalItems);
+		adapter.setTextSize(18);
+		wheel.setViewAdapter(adapter);
+		wheel.setCurrentItem(0);        
+	}
+
+	private void updateVerseWheel(WheelView wheel, Context ctx, int bid, int chpid) {
+
+		int versetotal = dbHelper.getVerseTotalFomBookIDANDChapterID(bid+1, chpid+1);
+		String[] totalItems = new String[versetotal];
+		for ( int i =0; i < versetotal; i++){
+			totalItems[i] = (String.valueOf(i+1));
+
+		}
+		ArrayWheelAdapter<String> adapter =
+				new ArrayWheelAdapter<String>(this, totalItems);
+		adapter.setTextSize(18);
+		wheel.setViewAdapter(adapter);
+		wheel.setCurrentItem(0); 
+
+	}
+
+
+
+
+	/**
+	 * Adapter for Verses
+	 */
+
+	private class VerseAdapter extends AbstractWheelTextAdapter {
+		//chapter numbers
+		private String verses[];
+
+
+
+		/**
+		 * Constructor
+		 */
+		protected VerseAdapter(Context context, int vtotal) {
+			super(context, R.layout.chapter_layout, NO_RESOURCE);
+			setItemTextResource(R.id.chapter_number);
+			verses = new String[vtotal];
+			for ( int i =0; i < vtotal; i++){
+				verses[i] = (String.valueOf(i+1));
+
+			}
+		}
+
+		@Override
+		public View getItem(int index, View cachedView, ViewGroup parent) {
+			View view = super.getItem(index, cachedView, parent);
+
+			return view;
+		}
+
+		@Override
+		public int getItemsCount() {
+			return verses.length;
+		}
+
+		@Override
+		protected CharSequence getItemText(int index) {
+			return verses[index];
+		}
+	}
+
+
+	/**
+	 * Adapter for chapters
+	 */
+	private class ChapterAdapter extends AbstractWheelTextAdapter {
+		//chapter numbers
+		private String chapters[];
+
+
+
+		/**
+		 * Constructor
+		 */
+		protected ChapterAdapter(Context context, int chptotal) {
+			super(context, R.layout.chapter_layout, NO_RESOURCE);
+
+			setItemTextResource(R.id.chapter_number);
+			chapters = new String[chptotal];
+			for ( int i =0; i < chptotal; i++){
+				chapters[i] = (String.valueOf(i+1));
+
+			}
+		}
+
+		@Override
+		public View getItem(int index, View cachedView, ViewGroup parent) {
+			View view = super.getItem(index, cachedView, parent);
+
+			return view;
+		}
+
+		@Override
+		public int getItemsCount() {
+			return chapters.length;
+		}
+
+		@Override
+		protected CharSequence getItemText(int index) {
+			return chapters[index];
+		}
+	}
+
+
+	/**
+	 * Adapter for books
+	 */
+	private class BookAdapter extends AbstractWheelTextAdapter {
+
+		private ArrayList<String> books;
+		private ArrayList<String> totalchp;
+		ArrayList<ArrayList<String>> names_and_chaptotal;
+
+		/**
+		 * Constructor
+		 * @throws IOException 
+		 */
+		protected BookAdapter(Context context) throws IOException {
+			super(context, R.layout.book_layout, NO_RESOURCE);
+			setItemTextResource(R.id.book_name);
+
+
+			names_and_chaptotal = dbHelper.getBookInfo();
+			books = names_and_chaptotal.get(0);
+			bookNames = books;
+			totalchp = names_and_chaptotal.get(1);
+
+		}
+
+
+
+		public ArrayList<String> gettotalchp(){
+
+			return totalchp;
+		}
+
+		@Override
+		public View getItem(int index, View cachedView, ViewGroup parent) {
+			View view = super.getItem(index, cachedView, parent);
+
+			return view;
+		}
+
+		@Override
+		public int getItemsCount() {
+			return books.size();
+		}
+
+		@Override
+		protected CharSequence getItemText(int index) {
+			return books.get(index);
+		}
+	}
+}

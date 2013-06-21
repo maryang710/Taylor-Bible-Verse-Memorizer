@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="background">#4a4a4a</color>
+	<color name="divider">#242424</color>
+	<color name="list_background">#333333</color>
+	<color name="list_title">#f3f3f3</color>
+	<color name="list_title_grayed_out">#818181</color>
+	<color name="home_screen_button_label">#f3f3f3</color>
+	<color name="home_screen_footer_background">#000000</color>
+	<color name="home_screen_footer_text">#f3f3f3</color>
+</resources>

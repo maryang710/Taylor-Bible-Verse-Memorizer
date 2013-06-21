@@ -1,0 +1,87 @@
+package edu.taylor.cse.sbrandle.biblemem.v001;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+
+public class ActivityChooser extends Activity implements OnClickListener {
+
+	private static final String TAG = "ChooseActivity";
+
+    String refString = "Ref not set";
+    String textString = "Verse text not set!";
+	public int  project_id =0;
+	public int project_verse_id = 0;
+    
+
+	@Override
+    protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_chooser);
+            
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                refString = extras.getString("VERSE_REF");
+                textString = extras.getString("VERSE_TEXT");
+                project_id = extras.getInt("projectID");
+                project_verse_id =  extras.getInt("project_verse_id");
+            }
+
+            View mflButton = findViewById(R.id.activity_chooser_mfl_button);
+            mflButton.setOnClickListener(this);
+            View lwButton = findViewById(R.id.activity_chooser_lw_button);
+            lwButton.setOnClickListener(this);
+            View wdButton = findViewById(R.id.wordSearchButton);
+             wdButton.setOnClickListener(this);
+            
+    		//SharedPreferences settings = getPreferences(MODE_PRIVATE);
+            //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+            //SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+    		//beepOnError = settings.getBoolean("error_beep_pref", false);
+	}
+    
+    @Override
+	public void onClick(View v) {
+    	Intent intent = null;
+    	int id = v.getId();
+        if(id ==  R.id.activity_chooser_mfl_button){
+        	intent = new Intent(this, MemorizeFirstLetters.class);
+    		intent.putExtra("VERSE_REF", refString);
+    		intent.putExtra("VERSE_TEXT", textString);
+    		intent.putExtra("project_id", project_id);
+    		intent.putExtra("project_verse_id", project_verse_id);
+    		
+    		
+        	startActivity(intent);
+        } else if(id ==   R.id.wordSearchButton){
+        	intent = new Intent(this, WordSearchActivity.class);
+        	intent.putExtra("VERSE_REF", refString);
+    		intent.putExtra("VERSE_TEXT", textString);
+    		intent.putExtra("project_id", project_id);
+    		intent.putExtra("project_verse_id", project_verse_id);
+        	startActivity(intent);
+        }else if(id ==   R.id.activity_chooser_lw_button){
+        	intent = new Intent(this, LocateWord.class);
+        	intent.putExtra("VERSE_REF", refString);
+    		intent.putExtra("VERSE_TEXT", textString);
+    		intent.putExtra("project_id", project_id);
+    		intent.putExtra("project_verse_id", project_verse_id);
+        	startActivity(intent);
+        }else if(id ==   R.id.memorize_help_button){
+                    Log.d(TAG, "clicked on memorizer help button");
+        	//showInstructions();
+        	
+        }if(id ==   R.id.memorize_done_button){
+        
+            Log.d(TAG, "clicked on memorizer done button");
+        	finish();
+        }   	
+        
+    }
+    
+
+
+}

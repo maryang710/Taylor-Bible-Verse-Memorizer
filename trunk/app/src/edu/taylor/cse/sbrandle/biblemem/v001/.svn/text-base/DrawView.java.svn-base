@@ -1,0 +1,33 @@
+package edu.taylor.cse.sbrandle.biblemem.v001;
+
+
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.view.SurfaceView;
+
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.view.View;
+
+public class DrawView extends SurfaceView {
+    Paint paint = new Paint();
+
+    public DrawView(Context context) {
+        super(context);
+        paint.setColor(Color.GREEN);
+    }
+
+    
+    public void onDraw(Canvas canvas) {
+            canvas.drawLine(0, 0, 20, 20, paint);
+            canvas.drawLine(20, 0, 0, 20, paint);
+            
+    }
+    
+    
+
+}

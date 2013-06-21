@@ -1,0 +1,35 @@
+<resources>
+
+    <string-array name="setting_property_array">
+        <item>버전 정보</item>
+        <item>번역본</item>
+        <item>난이도</item>
+        <item>앱 정보</item>
+        <item>초기화</item>
+    </string-array>
+    
+    <string-array name="setting_difficulty">
+        <item>초급</item>
+        <item>중급</item>
+        <item>고급</item>
+    </string-array>
+    
+    <string-array name="project_list_long_click_setting_property_array">
+        <item>프로젝트 들어가기</item>
+        <item>프로젝트 이름 설정</item>
+        <item>프로젝트 초기화</item>
+        <item>프로젝트 없에기</item>
+    </string-array>
+    
+    <string-array name="project_verse_long_click_setting_property_array">
+        <item>구절 외우기</item>
+        <item>구절 초기화</item>
+        <item>구절 없에기</item>
+    </string-array>
+    
+    <string-array name="review_manager_long_click_setting_property_array">
+        <item>구절 외우기</item>
+        <item>구절 초기화</item>
+    </string-array>
+    
+</resources>

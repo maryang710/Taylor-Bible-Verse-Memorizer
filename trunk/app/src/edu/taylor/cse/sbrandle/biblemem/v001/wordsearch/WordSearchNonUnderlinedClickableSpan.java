@@ -1,0 +1,54 @@
+/** This custom class is used to create and handle the click event attached to every word.
+ * @author Eliezer Rodriguez
+ * @version 1.0 March 18, 2013
+ */
+package edu.taylor.cse.sbrandle.biblemem.v001.wordsearch;
+
+import android.graphics.Color;
+import android.text.TextPaint;
+import android.text.style.ClickableSpan;
+import android.view.View;
+
+public class WordSearchNonUnderlinedClickableSpan extends ClickableSpan {
+
+	private int id;
+	private TextPaint textpaint;
+	private boolean changecl = false;
+	
+	public WordSearchNonUnderlinedClickableSpan(int anID, String txt, int selected) {
+		id =anID;
+		if(selected == id) 
+			changecl = true;
+	}
+
+	@Override
+	public void updateDrawState(TextPaint ds) {
+		textpaint = ds;
+		ds.setColor(ds.linkColor);
+		if(changecl){
+			textpaint.bgColor = Color.GRAY;
+			textpaint.setARGB(255, 255, 255, 255);
+			//textpaint.setTypeface(Typeface.DEFAULT_BOLD);
+		}
+		ds.setUnderlineText(false);	
+	}
+ 
+	public void changeSpanBgColor(View widget){
+		changecl = true;
+		updateDrawState(textpaint);
+		widget.invalidate();
+	}
+	
+	@Override
+	public void onClick(View widget) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void setSpanTextID(int spanID){
+		id = spanID;
+	}
+	public int getSpanTextID(){
+		return id;
+	}
+}

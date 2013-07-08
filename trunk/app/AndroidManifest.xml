@@ -5,17 +5,19 @@
 
     <!-- Min version was 8 -->
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="8"
         android:targetSdkVersion="17" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name" >
+        android:label="@string/app_name"
+        android:theme="@style/CustomTitleTheme" >
         <activity
             android:name=".MainAct"
-            android:label="@string/icon_label">
+            android:label="@string/icon_label" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,76 +25,75 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".dialog.AboutDialog"
+            android:name="edu.taylor.cse.sbrandle.biblemem.v001.setting.SettingAboutDialog"
             android:label="@string/about_title"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
         <activity
-            android:name=".SettingAct"
-            android:label="@string/setting_label" >
+            android:name="edu.taylor.cse.sbrandle.biblemem.v001.setting.SettingAct" >
         </activity>
         <activity
-            android:name=".SettingBibleEditionAct"
-            android:label="@string/setting_bible_edition_label" >
+            android:name="edu.taylor.cse.sbrandle.biblemem.v001.setting.SettingBibleEditionAct" >
         </activity>
         <activity
-            android:name=".dialog.SettingDifficultyDialog"
+            android:name="edu.taylor.cse.sbrandle.biblemem.v001.setting.SettingDifficultyDialog"
             android:label="@string/setting_difficulty_label"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
         <activity
-            android:name=".VerseChooserAct"
-            android:label="@string/verse_chooser_title" >
+            android:name=".VerseChooserAct" >
         </activity>
         <activity
-            android:name=".ActivityChooserAct"
-            android:label="@string/activity_chooser_title" >
+            android:name=".ActivityChooserAct" >
         </activity>
         <activity
-            android:name=".dialog.FirstLetterHelpDialog"
+            android:name="edu.taylor.cse.sbrandle.biblemem.v001.firstletter.FirstLetterHelpDialog"
             android:label="@string/first_letter_help_title"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
         <activity
-            android:name=".FirstLetterAct"
-            android:label="@string/first_letter_title" >
+            android:name="edu.taylor.cse.sbrandle.biblemem.v001.firstletter.FirstLetterAct" >
         </activity>
         <activity
-            android:name=".dialog.LocateWordHelpDialog"
+            android:name="edu.taylor.cse.sbrandle.biblemem.v001.locateword.LocateWordHelpDialog"
             android:label="@string/locate_word_help_title"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
         <activity
-            android:name=".LocateWordAct"
-            android:label="@string/locate_word_title" >
+            android:name="edu.taylor.cse.sbrandle.biblemem.v001.locateword.LocateWordAct" >
         </activity>
         <activity
-            android:name=".WordSearchAct"
-            android:label="@string/word_search_title" >
+            android:name="edu.taylor.cse.sbrandle.biblemem.v001.project.ProjectListAct" >
         </activity>
         <activity
-            android:name=".ProjectListAct"
-            android:label="@string/project_list_label" >
-        </activity>
-        <activity
-            android:name=".dialog.ProjectListAddDialog"
+            android:name="edu.taylor.cse.sbrandle.biblemem.v001.project.ProjectListAddDialog"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
         <activity
-            android:name=".dialog.ProjectListLongClickSettingDialog"
+            android:name="edu.taylor.cse.sbrandle.biblemem.v001.project.ProjectListLongClickSettingDialog"
+            android:theme="@android:style/Theme.Dialog" >
+        </activity>
+        <activity android:name="edu.taylor.cse.sbrandle.biblemem.v001.project.ProjectVerseAct" >
+        </activity>
+        <activity
+            android:name="edu.taylor.cse.sbrandle.biblemem.v001.project.ProjectVerseLongClickSettingDialog"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
         <activity
-            android:name=".ProjectVerseAct" >
+            android:name="edu.taylor.cse.sbrandle.biblemem.v001.project.ReviewManagerAct" >
         </activity>
-        <activity
-            android:name=".dialog.ProjectVerseLongClickSettingDialog"
-            android:theme="@android:style/Theme.Dialog" >
-        </activity>
-        <activity
-            android:name=".ReviewManagerAct"
-            android:label="@string/review_label" >
-        </activity>
+
+        <receiver
+            android:name="edu.taylor.cse.sbrandle.biblemem.v001.widget.todayverse.TodayVerseWidget"
+            android:label="@string/today_verse_widget_title" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/today_verse_widget_provider" />
+        </receiver>
     </application>
 
 </manifest>

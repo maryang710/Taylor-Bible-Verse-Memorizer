@@ -5,13 +5,12 @@
     android:gravity="center"
     android:orientation="vertical" >
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <edu.taylor.cse.sbrandle.biblemem.v001.layout.WordSearchGridLayout
+        <edu.taylor.cse.sbrandle.biblemem.v001.wordsearch.WordSearchGridLayout
             android:id="@+id/wordGrid"
             android:layout_width="fill_parent"
             android:layout_height="298dp"
@@ -19,14 +18,14 @@
             android:gravity="center"
             android:numColumns="auto_fit"
             android:stretchMode="columnWidth" >
-        </edu.taylor.cse.sbrandle.biblemem.v001.layout.WordSearchGridLayout>
+        </edu.taylor.cse.sbrandle.biblemem.v001.wordsearch.WordSearchGridLayout>
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="89dp"
             android:layout_weight="0.06" >
 
-            <edu.taylor.cse.sbrandle.biblemem.v001.layout.WordSearchTextView
+            <edu.taylor.cse.sbrandle.biblemem.v001.wordsearch.WordSearchTextView
                 android:id="@+id/ctxview"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
@@ -65,7 +64,6 @@
                     android:background="@drawable/help"
                     android:gravity="center" />
             </LinearLayout>
-
         </LinearLayout>
     </LinearLayout>
 

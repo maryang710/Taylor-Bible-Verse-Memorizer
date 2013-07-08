@@ -18,12 +18,6 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/activity_chooser_verse_ref_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="28sp" />
-
-            <TextView
                 android:id="@+id/activity_chooser_verse_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -44,7 +38,7 @@
 
             <Button
                 android:id="@+id/activity_chooser_mfl_button"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/first_letter_title"
@@ -52,12 +46,11 @@
 
             <Button
                 android:id="@+id/activity_chooser_lw_button"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/locate_word_title"
                 android:textSize="24sp" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -66,16 +59,8 @@
             android:orientation="horizontal" >
 
             <Button
-                android:id="@+id/activity_chooser_word_search_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/word_search_title"
-                android:textSize="24sp" />
-
-            <Button
                 android:id="@+id/activity_chooser_back_button"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/activity_chooser_back_label"

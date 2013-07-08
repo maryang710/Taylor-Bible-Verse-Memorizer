@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.database.Cursor;
-import edu.taylor.cse.sbrandle.biblemem.v001.object.BookObject;
-import edu.taylor.cse.sbrandle.biblemem.v001.object.VerseObject;
+import edu.taylor.cse.sbrandle.biblemem.v001.BookObject;
+import edu.taylor.cse.sbrandle.biblemem.v001.VerseObject;
 
 /**
  * It deals with English mode phone.
@@ -79,38 +79,34 @@ public class DatabaseKJVEnManager extends DatabaseManager {
 		row.close();
 		return book;
 	}
-	
-	
-	
-	/**
-	 * getVerseWithReference returns two strings, one containing the the reference for a verse, and the other the actual text for the verse
-	 * @param bid Book ID
-	 * @param chpid Chapter Number
-	 * @param vnum Verse Number
-	 * @return
-	 */
-	@Override
-	public String[] getRefVerse(int bid, int chpid, int vnum){
+//
+//
+//
+//	/**
+//	 * getVerseWithReference returns two strings, one containing the the reference for a verse, and the other the actual text for the verse
+//	 * @param bid Book ID
+//	 * @param chpid Chapter Number
+//	 * @param vnum Verse Number
+//	 * @return
+//	 */
+//	@Override
+//	public String[] getRefVerse(int bid, int chpid, int vnum){
+//		String sql = "SELECT DISTINCT B.name, V.chapter, V.verse, V.contents FROM BookEn B, KJV V WHERE B.book_id ="
+//				+ bid + " AND V.book=" + bid + " AND V.chapter=" +  chpid + " AND V.verse=" + vnum;
+//		Cursor row = db.rawQuery(sql, null);
+//
+//		String[] refVerse = new String[2];
+//		if ((row.getCount() > 0) && (!row.isClosed())) {
+//			row.moveToFirst();
+//			refVerse[0] = row.getString(0) + " " + (row.getInt(1)+1) +  ":" + row.getInt(2);
+//			refVerse[1] = row.getString(3);
+//		} 
+//		row.close();
+//		return refVerse;
+//	}
 
-		String sql = "SELECT DISTINCT B.name, V.chapter, V.verse, V.contents FROM BookEn B, KJV V WHERE B.book_id ="
-				+ bid + " AND V.book=" + bid + " AND V.chapter=" +  chpid + " AND V.verse=" + vnum;
-		Cursor row = db.rawQuery(sql, null);
 
-		String[] refVerse = new String[2];
-		if ((row.getCount() > 0) && (!row.isClosed())) {
-			row.moveToFirst();
-			do {
-				refVerse[0] = row.getString(0) + " " + (row.getInt(1)+1) +  ":" + row.getInt(2);
-				refVerse[1] = row.getString(3);
-			} while(row.moveToNext());
-		} 
 
-		row.close();
-		return refVerse;
-	}
-	
-	
-	
 	@Override
 	public VerseObject getVerse(int _id){
 		String sql = "SELECT DISTINCT _id, vername, book, chapter, verse, contents FROM KJV WHERE _id=" + _id + ";";
@@ -119,9 +115,7 @@ public class DatabaseKJVEnManager extends DatabaseManager {
 		VerseObject verse = null;
 		if ((row.getCount() > 0) && (!row.isClosed())) {
 			row.moveToFirst();
-			do {
-				verse = new VerseObject(row.getInt(0), row.getString(1), row.getInt(2), row.getInt(3), row.getInt(4), row.getString(5));
-			} while(row.moveToNext());
+			verse = new VerseObject(row.getInt(0), row.getString(1), row.getInt(2), row.getInt(3), row.getInt(4), row.getString(5));
 		}
 		row.close();
 		return verse;

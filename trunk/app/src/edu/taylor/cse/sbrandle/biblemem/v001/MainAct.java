@@ -10,7 +10,11 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import edu.taylor.cse.sbrandle.biblemem.v001.database.DatabaseKJVEnManager;
 import edu.taylor.cse.sbrandle.biblemem.v001.database.DatabaseManager;
+import edu.taylor.cse.sbrandle.biblemem.v001.global.GlobalManager;
 import edu.taylor.cse.sbrandle.biblemem.v001.global.GlobalVariable;
+import edu.taylor.cse.sbrandle.biblemem.v001.project.ProjectListAct;
+import edu.taylor.cse.sbrandle.biblemem.v001.project.ReviewManagerAct;
+import edu.taylor.cse.sbrandle.biblemem.v001.setting.SettingAct;
 
 
 /**
@@ -27,14 +31,16 @@ import edu.taylor.cse.sbrandle.biblemem.v001.global.GlobalVariable;
 public class MainAct extends Activity implements OnClickListener {
 
 	private DatabaseManager databaseManager;
-	
-	
+
+
 	/*** Activity ***/
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+		GlobalManager.setCustomContentView(this, R.layout.main);
+		findViewById(R.id.title_bar_text).setVisibility(View.GONE);
+
 
 		// DB work
 		try {
@@ -45,14 +51,9 @@ public class MainAct extends Activity implements OnClickListener {
 		}
 
 
-		// Set title different from icon label
-		
-		setTitle(getResources().getString(R.string.main_label));
-		
-		
 		// Find button views
 		// Register OnClickListener
-		
+
 		Button memorizeButton = (Button) findViewById(R.id.main_memorize_button);
 		memorizeButton.setOnClickListener(this);
 
@@ -69,7 +70,7 @@ public class MainAct extends Activity implements OnClickListener {
 		exitButton.setOnClickListener(this);
 	}
 
-	
+
 
 	/*** OnClickListener***/
 
@@ -92,7 +93,7 @@ public class MainAct extends Activity implements OnClickListener {
 			i = new Intent(this, ProjectListAct.class);
 			startActivity(i);
 		}
-		
+
 		else if(id == R.id.main_review_button){
 			i = new Intent(this, ReviewManagerAct.class);
 			startActivity(i);

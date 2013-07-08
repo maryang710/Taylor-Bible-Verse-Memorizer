@@ -13,14 +13,11 @@
     <string name="add_project_label">Add Project</string>
     <string name="add_verse_label">Add Verse</string>
     <string name="remove_label">Remove</string>
-    <string name="success_label">Success!</string>
+    <string name="success_label">Success</string>
     <string name="fail_label">Fail</string>
     <string name="yes_label">Yes</string>
     <string name="no_label">No</string>
-    <string name="example_label">Example</string>
     <string name="init_label">Initialize</string>
-    
-    <string name="main_label">Menu</string>
     
     <string name="one_more_dialog_text1">You completed</string>
     <string name="one_more_dialog_text2">% of this verse.</string>
@@ -29,7 +26,6 @@
     <string name="about_title">About This Bible Verse Memorizer</string>
     <string name="about_text">Bible Verse Memorization is a long-term project of students and faculties in Taylor University Department of Computer Science. The project started in the fall of 2010.</string>
     
-    <string name="activity_chooser_title">Choose Method</string>
     <string name="activity_chooser_back_label">Another Verse</string>
     
     <string name="memorize_verse_label">Memorize Verse</string>
@@ -46,9 +42,10 @@
     <string name="locate_word_title">Locate Word</string>
     <string name="locate_word_chance">Chance:</string>
     
+    <string name="frog_jump_title">Frog Jump</string>
+    
     <string name="word_search_title">Word Search</string>
     
-    <string name="verse_chooser_title">Choose a verse</string>
     <string name="verse_chooser_memorize_button">Memorize this Verse</string>
     <string name="verse_chooser_add_verse_toast_success">It is now added in this project</string>
     <string name="verse_chooser_add_verse_toast_fail">It is already in this project</string>
@@ -63,11 +60,15 @@
     
     <string name="setting_difficulty_label">Difficulty</string>
     
-    <string name="project_list_label">Project List</string>
     <string name="project_list_add_dialog_name">Project Name&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</string>
     <string name="project_list_remove_dialog_message">Do you want to remove?</string>
     <string name="project_list_init_dialog_message">Do you want to initialize?</string>
 
     <string name="project_verse_back_button">Another Project</string>
 
+    <string name="today_verse_widget_title">Today Verse</string>
+    
+    <string name="ok_not_image">OK Not Image</string>
+    <string name="title_home_icon">Title Home Icon</string>
+    
 </resources>

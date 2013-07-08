@@ -11,14 +11,19 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import edu.taylor.cse.sbrandle.biblemem.v001.database.DatabaseManager;
 import edu.taylor.cse.sbrandle.biblemem.v001.global.GlobalFactory;
+import edu.taylor.cse.sbrandle.biblemem.v001.global.GlobalManager;
 import edu.taylor.cse.sbrandle.biblemem.v001.global.GlobalVariable;
-import edu.taylor.cse.sbrandle.biblemem.v001.object.BookObject;
+import edu.taylor.cse.sbrandle.biblemem.v001.setting.SettingBibleEditionAct;
 
 
 /**
@@ -46,7 +51,7 @@ public class VerseChooserAct extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.verse_chooser);
+		GlobalManager.setCustomContentView(this, R.layout.verse_chooser);
 
 
 		// DB work
@@ -60,66 +65,25 @@ public class VerseChooserAct extends Activity {
 
 
 		// Get Intent from previous Activity as a bundle form.
-		// Previous Activities are MainAct, Project...?
 		// Intent includes the activity information.
-		// Find Wheel view resources
 
 		Bundle extras = getIntent().getExtras();
 		projectId =  extras.getInt(GlobalVariable.PROJECT_ID);
 		boolean memorize = extras.getBoolean(GlobalVariable.MEMORIZE);
 		boolean project = extras.getBoolean(GlobalVariable.PROJECT);
 
+
+		// Find Wheel view resources
+
 		bookWheel = (WheelView) findViewById(R.id.verse_chooser_wheel_book);
 		chapterWheel = (WheelView) findViewById(R.id.verse_chooser_wheel_chapter);
 		verseWheel = (WheelView) findViewById(R.id.verse_chooser_wheel_verse);
-
-
-		// Verse wheel setting
-
-		verseWheel.setVisibleItems(5);
-		verseWheel.setViewAdapter(new VerseAdapter(this, 31));
-
-
-		// Chapter wheel setting
-
-		chapterWheel.setVisibleItems(3);
-		chapterWheel.setViewAdapter(new ChapterAdapter(this, 50));
-		chapterWheel.addScrollingListener( new OnWheelScrollListener() {
-			public void onScrollingStarted(WheelView wheel) {
-
-			}
-			public void onScrollingFinished(WheelView wheel) {
-				if(!VerseChooserAct.this.isFinishing())
-					updateVerseWheel(verseWheel, Integer.valueOf(bookWheel.getCurrentItem()), wheel.getCurrentItem());
-			}
-		});
-
-
-		// Make book adapter
-		// Register the adapter to book wheel
-		// Book wheel setting
-
-		books = databaseManager.getBookList();
-		bookWheel.setVisibleItems(3);
-		bookWheel.setViewAdapter(new BookAdapter(this, books));
-		bookWheel.addScrollingListener( new OnWheelScrollListener() {
-			public void onScrollingStarted(WheelView wheel) {
-
-			}
-			public void onScrollingFinished(WheelView wheel) {
-				if(!VerseChooserAct.this.isFinishing()){
-					updateChapterWheel(chapterWheel, books.get(wheel.getCurrentItem()).getChapterCount());
-					updateVerseWheel(verseWheel, wheel.getCurrentItem(), Integer.valueOf(chapterWheel.getCurrentItem()));
-				}
-			}
-		});
 
 
 		// Buttons Setting
 		// This Activity decides which buttons will be shown
 		// by Activity information got from previous Activity intent. 
 
-		// if the previous Activity is MainAct, hide add project button.
 
 		Button backbutton = (Button) findViewById(R.id.verse_chooser_back_button);
 		backbutton.setOnClickListener(new Button.OnClickListener() {
@@ -127,6 +91,10 @@ public class VerseChooserAct extends Activity {
 				finish();
 			}
 		});
+
+
+		// if the previous Activity is MainAct, hide add project button.
+		// Hide Title Text
 
 		if(memorize){
 			Button button = (Button) findViewById(R.id.verse_chooser_add_verse_to_project_button);
@@ -141,7 +109,8 @@ public class VerseChooserAct extends Activity {
 		}
 
 
-		// if the previous Activity is Project...?, hide memorize button.
+		// if the previous Activity is Project, hide memorize button.
+		// Set title text with project name
 
 		else if(project){
 			Button button = (Button) findViewById(R.id.verse_chooser_memorize_button);
@@ -156,23 +125,103 @@ public class VerseChooserAct extends Activity {
 
 			backbutton.setText(getResources().getString(R.string.done_label));
 		}
+		
+		
+		// Get Book List
+		// Book Widget List Setting
+		// Wheel Event Setting
+		
+		books = databaseManager.getBookList();
+		bookWheel.setViewAdapter(new BookAdapter(this, books));	
+		
+		chapterWheel.addScrollingListener( new OnWheelScrollListener() {
+			public void onScrollingStarted(WheelView wheel) {
+
+			}
+			public void onScrollingFinished(WheelView wheel) {
+				if(!VerseChooserAct.this.isFinishing())
+					updateVerseWheel(verseWheel, Integer.valueOf(bookWheel.getCurrentItem()), wheel.getCurrentItem());
+			}
+		});
+		
+		bookWheel.addScrollingListener( new OnWheelScrollListener() {
+			public void onScrollingStarted(WheelView wheel) {
+
+			}
+			public void onScrollingFinished(WheelView wheel) {
+				if(!VerseChooserAct.this.isFinishing()){
+					updateChapterWheel(chapterWheel, books.get(wheel.getCurrentItem()).getChapterCount());
+					updateVerseWheel(verseWheel, wheel.getCurrentItem(), Integer.valueOf(chapterWheel.getCurrentItem()));
+				}
+			}
+		});
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		databaseManager.openDatabase();
+		try {
+			databaseManager = GlobalFactory.getDatabaseManagerByLanguage(this);
+			databaseManager.openDatabase();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		refreshVerseListWidget();
+		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 		databaseManager.closeDatabase();
+		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.edition, menu);
+		return true;
+	} 
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_edition:
+			Intent intent = new Intent(this, SettingBibleEditionAct.class);
+			startActivity(intent);
+			break;
+		default:
+			break;
+		}
+		return true;
 	}
 
 
 
 	/*** Self Method ***/
+
+	/**
+	 * Refresh Widget by phone's bible edition setting
+	 * 
+	 * @param
+	 * @return
+	 * 
+	 */
+	private void refreshVerseListWidget(){
+
+		// Set Title Bar Text
+
+		TextView titleBarText = (TextView) findViewById(R.id.title_bar_text);
+		titleBarText.setText(databaseManager.getBibleEditionName());
+
+		
+		// Chapter and Verst Widget List Setting
+		
+		updateChapterWheel(chapterWheel, books.get(bookWheel.getCurrentItem()).getChapterCount());
+		updateVerseWheel(verseWheel, bookWheel.getCurrentItem(), Integer.valueOf(chapterWheel.getCurrentItem()));
+	}
+
 
 
 	/**
@@ -190,17 +239,14 @@ public class VerseChooserAct extends Activity {
 
 		// Get current wheel position
 		// Get verse from DB by current wheel position
+		// Get Reference and verse text from verse object
 
 		int b = bookWheel.getCurrentItem();
 		int c = chapterWheel.getCurrentItem();
 		int v = verseWheel.getCurrentItem()+1; 
-		String[] projectVerse = databaseManager.getRefVerse(b,c,v);
-
-
-		// Convert Verse to String
-
-		String refString = projectVerse[0];
-		String textString = projectVerse[1];
+		VerseObject verse = databaseManager.getVerse(databaseManager.getVerseIdFromWidgetIndex(b, c, v));
+		String refString = databaseManager.getBook(verse.getBook()).getName() + " " + (verse.getChapter()+1) + ":" + verse.getVerse();
+		String textString = verse.getContents();
 
 
 		// Set Intent to ActivityChoosetAct
@@ -211,7 +257,7 @@ public class VerseChooserAct extends Activity {
 		startActivity(intent);
 	}
 
-	
+
 
 	/**
 	 * The method which is called When add verse to project button is clicked.
@@ -239,7 +285,7 @@ public class VerseChooserAct extends Activity {
 		// If the verse is already in the project, fail.
 		// Otherwise, success.
 
-		if(databaseManager.addVerseToProject(projectId, b, c, v, 0))
+		if(databaseManager.addVerseToProject(projectId, databaseManager.getVerseIdFromWidgetIndex(b, c, v), 0))
 			Toast.makeText(this, getResources().getString(R.string.verse_chooser_add_verse_toast_success), Toast.LENGTH_LONG).show();
 		else
 			Toast.makeText(this, getResources().getString(R.string.verse_chooser_add_verse_toast_fail), Toast.LENGTH_LONG).show();
@@ -299,8 +345,8 @@ public class VerseChooserAct extends Activity {
 		wheel.setCurrentItem(0); 
 	}
 
-	
-	
+
+
 	/**
 	 * Adapter for books
 	 */
@@ -328,78 +374,6 @@ public class VerseChooserAct extends Activity {
 		@Override
 		protected CharSequence getItemText(int index) {
 			return books.get(index).getName();
-		}
-	}
-
-
-
-	/**
-	 * Adapter for chapters
-	 */
-	private class ChapterAdapter extends AbstractWheelTextAdapter {
-
-		//chapter numbers
-		private String chapters[];
-
-
-		protected ChapterAdapter(Context context, int chptotal) {
-			super(context, R.layout.wheel_item, NO_RESOURCE);
-			setItemTextResource(R.id.wheel_item_text);
-
-			chapters = new String[chptotal];
-			for ( int i =0; i < chptotal; i++)
-				chapters[i] = (String.valueOf(i+1));
-		}
-
-		@Override
-		public View getItem(int index, View cachedView, ViewGroup parent) {
-			return super.getItem(index, cachedView, parent);
-		}
-
-		@Override
-		public int getItemsCount() {
-			return chapters.length;
-		}
-
-		@Override
-		protected CharSequence getItemText(int index) {
-			return chapters[index];
-		}
-	}
-
-
-
-	/**
-	 * Adapter for Verses
-	 */
-	private class VerseAdapter extends AbstractWheelTextAdapter {
-
-		//chapter numbers
-		private String verses[];
-
-
-		protected VerseAdapter(Context context, int vtotal) {
-			super(context, R.layout.wheel_item, NO_RESOURCE);
-			setItemTextResource(R.id.wheel_item_text);
-
-			verses = new String[vtotal];
-			for ( int i =0; i < vtotal; i++)
-				verses[i] = (String.valueOf(i+1));
-		}
-
-		@Override
-		public View getItem(int index, View cachedView, ViewGroup parent) {
-			return super.getItem(index, cachedView, parent);
-		}
-
-		@Override
-		public int getItemsCount() {
-			return verses.length;
-		}
-
-		@Override
-		protected CharSequence getItemText(int index) {
-			return verses[index];
 		}
 	}
 }

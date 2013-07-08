@@ -4,13 +4,23 @@ package edu.taylor.cse.sbrandle.biblemem.v001.global;
 
 public class GlobalVariable {
 
+	// API Version Int
+	
+	public static final int HONEYCOMB = 11;
+	
+	
+	
 	// For Criteria of verse memorize in each method
 
 	public static final int CRITERIA_OF_SUCCESS = 99;
 
+	
+	// How many verses are in DB
+	
+	public static final int HOW_MANY_VERSES = 31100;
+	
 
-
-	// difficulty
+	// Difficulty
 
 	public static final String DIFFICULTY_KEY = "DIFFICULTY_KEY";
 	public static final String DIFFICULTY = "DIFFICULTY";
@@ -20,9 +30,19 @@ public class GlobalVariable {
 	public static final float EASY = (float) 0.2;
 	public static final float NORMAL = (float) 0.5;
 	public static final float HARD = (float) 0.8;
+	public static final int EASY_INDEX = 0;
+	public static final int NORMAL_INDEX = 1;
+	public static final int HARD_INDEX = 2;
 
 
+	// Today Verse Number
 
+	public static final String TODAY_VERSE_KEY = "TODAY_VERSE_KEY";
+	public static final String TODAY_VERSE_NUMBER = "TODAY_VERSE_NUMBER";
+	public static final String TODAY = "TODAY";
+	
+	
+	
 	// Language code
 
 	public static final int EDITION_COUNT = 2;
@@ -45,10 +65,11 @@ public class GlobalVariable {
 
 	public static final String VERSE_REF = "VERSE_REF";
 	public static final String VERSE_TEXT = "VERSE_TEXT";
+	
 	public static final String PROJECT_ID = "PROJECT_ID";
 	public static final String PROJECT_VERSE_ID = "PROJECT_VERSE_ID";
 	public static final String PROJECT_NAME= "PROJECT_NAME";
-
+	
 	public static final String MEMORIZE = "MEMORIZE";
 	public static final String PROJECT = "PROJECT";
 
@@ -60,7 +81,7 @@ public class GlobalVariable {
 
 	public static final String VERSE_ID = "VERSE_ID";
 
-
+	public static final String TODAY_VERSE_WIDGET = "TODAY_VERSE_WIDGET";
 
 	// Locate Word Instant State Key
 

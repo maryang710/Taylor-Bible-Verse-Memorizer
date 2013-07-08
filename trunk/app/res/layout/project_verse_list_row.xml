@@ -48,7 +48,7 @@
             android:id="@+id/project_verse_list_row_whether"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/example_label"
+            android:contentDescription="@string/ok_not_image"
             android:src="@drawable/project_verse_list_row_not" />
     </LinearLayout>
 

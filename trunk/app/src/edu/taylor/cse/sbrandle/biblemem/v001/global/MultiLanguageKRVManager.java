@@ -62,6 +62,6 @@ public class MultiLanguageKRVManager implements MultiLanguageManager {
 	 */
 	@Override
 	public String getFirstLetter(String word){
-		return ""+GlobalMethod.splitKoreanIntoAlphabet(word).get(0);
+		return ""+GlobalManager.splitKoreanIntoAlphabet(word).get(0);
 	}
 }

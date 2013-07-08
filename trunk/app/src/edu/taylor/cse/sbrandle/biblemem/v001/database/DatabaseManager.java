@@ -20,12 +20,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
+import edu.taylor.cse.sbrandle.biblemem.v001.BookObject;
+import edu.taylor.cse.sbrandle.biblemem.v001.VerseObject;
 import edu.taylor.cse.sbrandle.biblemem.v001.global.GlobalFactory;
 import edu.taylor.cse.sbrandle.biblemem.v001.global.GlobalVariable;
-import edu.taylor.cse.sbrandle.biblemem.v001.object.BookObject;
-import edu.taylor.cse.sbrandle.biblemem.v001.object.ProjectObject;
-import edu.taylor.cse.sbrandle.biblemem.v001.object.ProjectVerseObject;
-import edu.taylor.cse.sbrandle.biblemem.v001.object.VerseObject;
+import edu.taylor.cse.sbrandle.biblemem.v001.project.ProjectObject;
+import edu.taylor.cse.sbrandle.biblemem.v001.project.ProjectVerseObject;
 
 public abstract class DatabaseManager extends SQLiteOpenHelper {
 
@@ -171,25 +171,13 @@ public abstract class DatabaseManager extends SQLiteOpenHelper {
 	 * @param versePercent
 	 * @return
 	 */
-	public boolean addVerseToProject(int projectId, int bid, int chpid, int vnum, int versePercent){
+	public boolean addVerseToProject(int projectId, int verseId, int versePercent){
 
-		// Select Verse Set from KJV, KRV
-
-		String sql = "SELECT DISTINCT _id FROM KJV WHERE book=" + bid + " AND chapter=" + chpid + " AND verse=" + vnum;
-		Cursor row = db.rawQuery(sql, null);
-
-		int verseId = 0;
-		if ((row.getCount() > 0) && (!row.isClosed())) {
-			row.moveToFirst();
-			verseId = row.getInt(0);
-		}
-		row.close();
-
-
+		// Get verse id from index that user selected
 		// Check whether it exists or not
-
-		sql = "SELECT DISTINCT project_verse_id FROM ProjectVerse WHERE project_id="+  projectId + " AND verse_id=" + verseId + ";";
-		row = db.rawQuery(sql, null);
+		
+		String sql = "SELECT DISTINCT project_verse_id FROM ProjectVerse WHERE project_id="+  projectId + " AND verse_id=" + verseId + ";";
+		Cursor row = db.rawQuery(sql, null);
 
 
 		// It it is, return false to prevent double inserting
@@ -214,6 +202,36 @@ public abstract class DatabaseManager extends SQLiteOpenHelper {
 			updateProjectScore(projectId);
 			return true;
 		}
+	}
+
+
+
+	/*** Select ***/
+
+	/**
+	 * Get verse id from index that user selected
+	 * 
+	 * @param projectId
+	 * @param bid
+	 * @param chpid
+	 * @param vnum
+	 * @param versePercent
+	 * @return
+	 */
+	public int getVerseIdFromWidgetIndex(int bid, int chpid, int vnum){
+
+		// Select Verse Set from KJV, KRV
+
+		String sql = "SELECT DISTINCT _id FROM KJV WHERE book=" + bid + " AND chapter=" + chpid + " AND verse=" + vnum;
+		Cursor row = db.rawQuery(sql, null);
+
+		int verseId = 0;
+		if ((row.getCount() > 0) && (!row.isClosed())) {
+			row.moveToFirst();
+			verseId = row.getInt(0);
+		}
+		row.close();
+		return verseId;
 	}
 
 
@@ -307,9 +325,9 @@ public abstract class DatabaseManager extends SQLiteOpenHelper {
 		row.close();
 		return projectVerseList;
 	}
-	
-	
-	
+
+
+
 	public ArrayList<ProjectVerseObject> getDoneProjectVerseIdList(){
 		String sql = "SELECT DISTINCT project_verse_id, project_id, verse_id, percent FROM ProjectVerse WHERE percent=100;";
 		Cursor row = db.rawQuery(sql, null);
@@ -478,6 +496,5 @@ public abstract class DatabaseManager extends SQLiteOpenHelper {
 
 	public abstract ArrayList<BookObject> getBookList();
 	public abstract BookObject getBook(int bookId);
-	public abstract String[] getRefVerse(int bid, int chpid, int vnum);
 	public abstract VerseObject getVerse(int _id);
 }
